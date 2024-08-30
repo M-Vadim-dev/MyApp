@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="day_status_bar_color">#F4FAFF</color>
+    <color name="night_status_bar_color">#FF000000</color>
+    <color name="navigation_bar_color">#F4FAFF</color>
 </resources>
