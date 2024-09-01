@@ -13,14 +13,6 @@
         <item name="cornerRadius">8dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:backgroundTint">@color/vivid_red_color</item>
-    </style>
-
-    <style name="StyleNavButton2" parent="StyleNavButton">
-        <item name="android:layout_marginEnd">4dp</item>
-        <item name="android:backgroundTint">@color/deep_blue_color</item>
     </style>
 
 </resources>

@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginHorizontal="@dimen/main_space_16"
         android:layout_marginVertical="@dimen/main_space_half_8"
@@ -21,12 +21,20 @@
 
         <Button
             android:id="@+id/btnCategory"
-            style="@style/StyleNavButton2"
+            style="@style/StyleNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/deep_blue_color"
+            android:paddingHorizontal="40dp"
             android:text="@string/button_category" />
 
         <Button
             android:id="@+id/btnFavourites"
             style="@style/StyleNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/vivid_red_color"
             android:text="@string/button_favourites"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"
