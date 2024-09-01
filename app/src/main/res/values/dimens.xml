@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="padding_button">16dp</dimen>
-    <dimen name="half_main_padding">8dp</dimen>
+    <dimen name="main_space_16">16dp</dimen>
+    <dimen name="main_space_half_8">8dp</dimen>
 </resources>

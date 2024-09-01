@@ -11,9 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginStart="@dimen/padding_button"
-        android:layout_marginEnd="@dimen/padding_button"
-        android:layout_marginBottom="@dimen/half_main_padding"
+        android:layout_marginHorizontal="@dimen/main_space_16"
+        android:layout_marginVertical="@dimen/main_space_half_8"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,24 +21,12 @@
 
         <Button
             android:id="@+id/btnCategory"
-            style="@style/StyleNavButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:backgroundTint="#525DC0"
-            android:gravity="center"
+            style="@style/StyleNavButton2"
             android:text="@string/button_category" />
 
         <Button
             android:id="@+id/btnFavourites"
             style="@style/StyleNavButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#E13E3E"
-            android:gravity="center"
             android:text="@string/button_favourites"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"

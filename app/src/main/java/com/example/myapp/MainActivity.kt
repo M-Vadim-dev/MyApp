@@ -19,19 +19,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-//        enableEdgeToEdge()
         setContentView(binding.root)
 
-        binding.btnCategory.text = "Категории"
-        binding.btnCategory.setTextColor(Color.WHITE)
-        binding.btnCategory.isVisible = true
-        binding.btnFavourites.setTextColor(Color.WHITE)
-        binding.btnFavourites.isVisible = true
-
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
     }
 }
