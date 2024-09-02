@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RecipeApp</string>
+    <string name="button_category">Category</string>
+    <string name="button_favourites">Favourites</string>
+</resources>
