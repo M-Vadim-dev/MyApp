@@ -22,17 +22,16 @@
         <Button
             android:id="@+id/btnCategory"
             style="@style/StyleNavButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/deep_blue_color"
-            android:paddingHorizontal="40dp"
             android:text="@string/button_category" />
 
         <Button
             android:id="@+id/btnFavourites"
             style="@style/StyleNavButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/vivid_red_color"
             android:text="@string/button_favourites"
