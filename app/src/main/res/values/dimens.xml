@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_space_0">0dp</dimen>
     <dimen name="main_space_16">16dp</dimen>
     <dimen name="main_space_half_8">8dp</dimen>
     <dimen name="indent_btn_2">2dp</dimen>
     <dimen name="indent_icon_btn_10">10dp</dimen>
-    <dimen name="btn_radius_8">8dp</dimen>
-    <dimen name="btn_text_size_14">14sp</dimen>
 </resources>
