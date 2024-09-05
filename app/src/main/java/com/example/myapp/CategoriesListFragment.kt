@@ -19,9 +19,8 @@ class CategoriesListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        _binding = FragmentListCategoriesBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onDestroyView() {
