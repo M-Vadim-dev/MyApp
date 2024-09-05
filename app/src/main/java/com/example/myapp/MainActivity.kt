@@ -2,12 +2,13 @@ package com.example.myapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.example.myapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by lazy(LazyThreadSafetyMode.NONE) {
+    private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                add(R.id.mainContainer, CategoriesListFragment())
+                add<CategoriesListFragment>(R.id.mainContainer)
             }
         }
 

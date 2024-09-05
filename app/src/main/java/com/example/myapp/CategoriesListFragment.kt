@@ -9,14 +9,23 @@ import com.example.myapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
 
-    private val binding: FragmentListCategoriesBinding by lazy(LazyThreadSafetyMode.NONE) {
-        FragmentListCategoriesBinding.inflate(layoutInflater)
-    }
+    private var _binding: FragmentListCategoriesBinding? = null
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException("Binding for FragmentListCategoriesBinding must not be null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = binding.root
+    ): View {
+        _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
