@@ -11,5 +11,4 @@ object STUB {
     )
 
     fun getCategories(): List<Category> = categories
-
 }
