@@ -9,13 +9,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clHeaderCategories"
         android:layout_width="match_parent"
-        android:layout_height="224dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivHeaderCategories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            android:src="@drawable/bcg_categories"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/main_space_16"
             android:layout_marginBottom="@dimen/main_space_16"
+            android:text="@string/button_category"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

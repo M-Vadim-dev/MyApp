@@ -26,8 +26,8 @@
             style="@style/StyleTitle15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/btn_text_size_14"
-            android:padding="@dimen/main_space_half_8" />
+            android:padding="@dimen/main_space_half_8"
+            android:textSize="@dimen/btn_text_size_14" />
 
     </LinearLayout>
 
