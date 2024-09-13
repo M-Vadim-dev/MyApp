@@ -22,6 +22,12 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="StyleTitle16" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
     <style name="StyleLabel" parent="@android:style/Widget.TextView">
         <item name="android:textAppearance">@style/StyleTitle15</item>
         <item name="cornerRadius">@dimen/main_space_half_8</item>
