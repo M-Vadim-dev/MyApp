@@ -19,8 +19,9 @@
         <ImageView
             android:id="@+id/ivImageCategory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/category_image_130"
             android:scaleType="centerCrop"
+            tools:ignore="ContentDescription"
             tools:src="@drawable/bcg_categories" />
 
         <TextView
@@ -37,8 +38,7 @@
             style="@style/StyleTitle16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/main_space_half_8"
-            android:layout_marginEnd="@dimen/main_space_half_8"
+            android:layout_marginHorizontal="@dimen/main_space_half_8"
             android:layout_marginBottom="@dimen/main_space_half_8"
             tools:text="Рецепты всех популярных видов бургеров" />
 
