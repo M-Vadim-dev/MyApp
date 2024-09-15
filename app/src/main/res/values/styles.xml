@@ -10,9 +10,29 @@
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">
         <item name="android:textAppearance">@style/StyleTitle14</item>
-        <item name="cornerRadius">@dimen/btn_radius_8</item>
+        <item name="cornerRadius">@dimen/main_space_half_8</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="StyleTitle15" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textColor">@color/deep_purple_color</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="StyleTitle16" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="StyleLabel" parent="@android:style/Widget.TextView">
+        <item name="android:textAppearance">@style/StyleTitle15</item>
+        <item name="cornerRadius">@dimen/main_space_half_8</item>
+        <item name="android:background">@drawable/shape_rounded_label</item>
+        <item name="android:padding">@dimen/indent_icon_btn_10</item>
     </style>
 
 </resources>
