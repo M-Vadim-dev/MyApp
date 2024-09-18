@@ -42,6 +42,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         }
 
         viewHolder.imageView.setImageDrawable(drawable)
+        viewHolder.imageView.contentDescription = "Изображение категории ${category.title}"
 
     }
 
