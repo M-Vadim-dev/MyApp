@@ -12,6 +12,16 @@ import com.example.myapp.databinding.ItemCategoryBinding
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick(category: Category)
+    }
+
+    private var itemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
     class ViewHolder(binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val imageView: ImageView = binding.ivImageCategory
@@ -42,8 +52,13 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         }
 
         viewHolder.imageView.setImageDrawable(drawable)
-        viewHolder.imageView.contentDescription = "Изображение категории ${category.title}"
+        viewHolder.imageView.contentDescription =
+            viewHolder.itemView.context.getString(
+                R.string.image_description_with_title,
+                category.title
+            )
 
+        viewHolder.itemView.setOnClickListener { itemClickListener?.onItemClick(category) }
     }
 
     override fun getItemCount(): Int = dataSet.size

@@ -3,4 +3,5 @@
     <string name="button_category">Категории</string>
     <string name="button_favourites">Избранное</string>
     <string name="category_description">Описание категории</string>
+    <string name="image_description_with_title">Изображение категории %1$s</string>
 </resources>

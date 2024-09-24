@@ -29,7 +29,21 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        binding.rvCategories.adapter = CategoriesListAdapter(STUB.getCategories())
+        val adapter = CategoriesListAdapter(STUB.getCategories())
+        binding.rvCategories.adapter = adapter
+
+        adapter.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
+            override fun onItemClick(category: Category) {
+                openRecipesByCategoryId()
+            }
+        })
+    }
+
+    private fun openRecipesByCategoryId() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.mainContainer, RecipesListFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {
