@@ -54,7 +54,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         viewHolder.imageView.setImageDrawable(drawable)
         viewHolder.imageView.contentDescription =
             viewHolder.itemView.context.getString(
-                R.string.image_description_with_title,
+                R.string.text_image_description,
                 category.title
             )
 
