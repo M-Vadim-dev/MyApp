@@ -4,22 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.example.myapp.databinding.FragmentListCategoriesBinding
 
-const val ARG_CATEGORY_ID = "arg_category_id"
-const val ARG_CATEGORY_NAME = "arg_category_name"
-const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
-
 class CategoriesListFragment : Fragment() {
-
-    companion object {
-        const val ARG_CATEGORY_ID = "arg_category_id"
-        const val ARG_CATEGORY_NAME = "arg_category_name"
-        const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
-    }
 
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding
@@ -55,11 +46,11 @@ class CategoriesListFragment : Fragment() {
         val categoryName = STUB.getCategories().find { it.id == categoryId }?.title
         val categoryImageUrl = STUB.getCategories().find { it.id == categoryId }?.imageUrl
 
-        val bundle = Bundle().apply {
-            putInt(ARG_CATEGORY_ID, categoryId)
-            putString(ARG_CATEGORY_NAME, categoryName)
-            putString(ARG_CATEGORY_IMAGE_URL, categoryImageUrl)
-        }
+        val bundle = bundleOf(
+            ARG_CATEGORY_ID to categoryId,
+            ARG_CATEGORY_NAME to categoryName,
+            ARG_CATEGORY_IMAGE_URL to categoryImageUrl
+        )
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)
@@ -73,4 +64,9 @@ class CategoriesListFragment : Fragment() {
         _binding = null
     }
 
+    companion object {
+        const val ARG_CATEGORY_ID = "arg_category_id"
+        const val ARG_CATEGORY_NAME = "arg_category_name"
+        const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
+    }
 }

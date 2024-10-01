@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_ID
+import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
+import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
 import com.example.myapp.databinding.FragmentRecipesListBinding
 
 class RecipesListFragment : Fragment() {
@@ -30,9 +33,11 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        categoryId = requireArguments().getInt(ARG_CATEGORY_ID)
-        categoryName = requireArguments().getString(ARG_CATEGORY_NAME)
-        categoryImageUrl = requireArguments().getString(ARG_CATEGORY_IMAGE_URL)
+        requireArguments().let { args ->
+            categoryId = args.getInt(ARG_CATEGORY_ID)
+            categoryName = args.getString(ARG_CATEGORY_NAME)
+            categoryImageUrl = args.getString(ARG_CATEGORY_IMAGE_URL)
+        }
     }
 
     override fun onDestroyView() {
