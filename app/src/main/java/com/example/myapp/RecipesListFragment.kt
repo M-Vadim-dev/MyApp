@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_ID
 import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
 import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
@@ -37,6 +39,27 @@ class RecipesListFragment : Fragment() {
             categoryId = args.getInt(ARG_CATEGORY_ID)
             categoryName = args.getString(ARG_CATEGORY_NAME)
             categoryImageUrl = args.getString(ARG_CATEGORY_IMAGE_URL)
+        }
+
+        initRecycler()
+    }
+
+    private fun initRecycler() {
+        val adapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId ?: 0))
+        binding.rvRecipes.adapter = adapter
+
+        adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
+            override fun onItemClick(recipeId: Int) {
+                openRecipeByRecipeId(recipeId)
+            }
+        })
+    }
+
+    private fun openRecipeByRecipeId(recipeId: Int) {
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<RecipeFragment>(R.id.mainContainer)
+            addToBackStack(null)
         }
     }
 
