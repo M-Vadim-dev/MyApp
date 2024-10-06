@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/ivHeaderRecipes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/category_image_224"
             android:contentDescription="@string/text_category_description"
             android:scaleType="centerCrop"
             android:src="@drawable/bcg_categories"
@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/main_space_16"
             android:layout_marginBottom="@dimen/main_space_16"
-            android:text="@string/text_label_burgers"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Рецепт" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -43,6 +43,6 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="1"
         tools:itemCount="8"
-        tools:listitem="@layout/item_category" />
+        tools:listitem="@layout/item_recipe" />
 
 </LinearLayout>

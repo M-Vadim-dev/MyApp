@@ -1,6 +1,8 @@
 package com.example.myapp
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +43,28 @@ class RecipesListFragment : Fragment() {
             categoryImageUrl = args.getString(ARG_CATEGORY_IMAGE_URL)
         }
 
+        binding.tvLabelRecipes.text = categoryName
+        loadImageFromAssets(categoryImageUrl)
+        binding.ivHeaderRecipes.contentDescription =
+            getString(R.string.text_image_recipe_description, categoryName)
         initRecycler()
+    }
+
+    private fun loadImageFromAssets(imageFileName: String?) {
+        if (imageFileName != null) {
+            val drawable = try {
+                requireContext().assets.open(imageFileName).use { stream ->
+                    Drawable.createFromStream(stream, null)
+                }
+            } catch (e: Exception) {
+                Log.e("RecipesListFragment", "Error loading image: $imageFileName", e)
+                null
+            }
+            binding.ivHeaderRecipes.setImageDrawable(drawable)
+        } else {
+            Log.e("RecipesListFragment", "Image file name is null")
+            binding.ivHeaderRecipes.setImageDrawable(null)
+        }
     }
 
     private fun initRecycler() {

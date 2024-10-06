@@ -5,5 +5,4 @@
     <string name="text_category_description">Описание категории</string>
     <string name="text_image_description">Изображение категории %1$s</string>
     <string name="text_image_recipe_description">Изображение рецепта %1$s</string>
-    <string name="text_label_burgers">Бургеры</string>
 </resources>
