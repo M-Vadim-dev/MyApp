@@ -2,7 +2,7 @@
 <resources>
 
     <style name="StyleTitle14" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_medium</item>
         <item name="android:textSize">@dimen/btn_text_size_14</item>
         <item name="android:textColor">@color/white_color</item>
         <item name="android:textAllCaps">true</item>
@@ -16,7 +16,7 @@
     </style>
 
     <style name="StyleTitle15" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semibold</item>
         <item name="android:textSize">@dimen/text_size_20</item>
         <item name="android:textColor">@color/deep_purple_color</item>
         <item name="android:textAllCaps">true</item>
@@ -26,6 +26,23 @@
         <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="StyleTitle17" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="StyleTitle18" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">@dimen/btn_text_size_14</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="StyleTitle19" parent="TextAppearance.AppCompat">
+        <item name="android:textAppearance">@style/StyleTitle18</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="StyleLabel" parent="@android:style/Widget.TextView">
