@@ -21,7 +21,7 @@ class MethodAdapter(private val dataSet: List<String>) :
     }
 
     override fun onBindViewHolder(viewHolder: MethodViewHolder, position: Int) {
-        val methodItemList = dataSet[position]
+        val methodItemList = "${position + 1}. ${dataSet[position]}"
         viewHolder.methodTextView.text = methodItemList
     }
 
