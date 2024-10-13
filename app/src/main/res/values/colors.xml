@@ -7,5 +7,6 @@
     <color name="deep_blue_color">#525DC0</color>
     <color name="deep_purple_color">#5F3678</color>
     <color name="dark_gray">#666666</color>
-
+    <color name="mint_cream">#F5F5F5</color>
+    <color name="light_sky_blue">#A1A9F9</color>
 </resources>
