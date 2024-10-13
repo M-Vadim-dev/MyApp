@@ -70,10 +70,9 @@ class RecipeFragment : Fragment() {
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val value = progress + 1
                 binding.tvSeekBarServings.text =
-                    getString(R.string.text_servings_seekbar, value.toString())
-                (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(value)
+                    getString(R.string.text_servings_seekbar, progress.toString())
+                (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
