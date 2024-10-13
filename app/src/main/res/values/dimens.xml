@@ -6,6 +6,7 @@
     <dimen name="main_space_4">4dp</dimen>
     <dimen name="indent_btn_2">2dp</dimen>
     <dimen name="indent_icon_btn_10">10dp</dimen>
+    <dimen name="thumb_30">30dp</dimen>
     <dimen name="btn_text_size_14">14sp</dimen>
     <dimen name="text_space_6">6dp</dimen>
     <dimen name="text_space_12">12dp</dimen>
