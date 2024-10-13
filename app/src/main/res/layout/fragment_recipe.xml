@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/tvIngredientsTitle"
-            style="@style/StyleTitle15"
+            style="@style/StyleTitle20Caps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
@@ -48,29 +48,23 @@
             android:text="@string/text_ingredients"
             android:textSize="@dimen/text_size_20" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/tvSeekBarServings"
+            style="@style/StyleTitle16"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
-            android:layout_marginTop="@dimen/text_space_6"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginVertical="@dimen/text_space_6"
+            android:text="@string/text_servings_seekbar" />
 
-            <TextView
-                android:id="@+id/tvSeekBarServings"
-                style="@style/StyleTitle17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_servings_seekbar" />
-
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_space_6"
-                android:progressDrawable="@drawable/shape_seekbar"
-                android:thumb="@drawable/shape_seekbar_thumb" />
-        </LinearLayout>
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="@style/styleSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="5"
+            android:min="1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
@@ -80,11 +74,12 @@
             android:background="@drawable/shape_rounded_label"
             android:backgroundTint="@color/white_color"
             android:padding="@dimen/main_space_half_8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_ingredient" />
 
         <TextView
             android:id="@+id/tvMethodTitle"
-            style="@style/StyleTitle15"
+            style="@style/StyleTitle20Caps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
@@ -99,7 +94,8 @@
             android:background="@drawable/shape_rounded_label"
             android:backgroundTint="@color/white_color"
             android:padding="@dimen/main_space_half_8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_method" />
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

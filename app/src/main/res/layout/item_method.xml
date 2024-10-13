@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tvMethodDescription"
-        style="@style/StyleTitle18"
+        style="@style/StyleTitle14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/text_space_12"

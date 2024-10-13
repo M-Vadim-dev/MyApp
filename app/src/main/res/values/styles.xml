@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="StyleTitle14" parent="TextAppearance.AppCompat">
+    <style name="StyleTitle14Alternates" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/montserrat_alternates_medium</item>
         <item name="android:textSize">@dimen/btn_text_size_14</item>
         <item name="android:textColor">@color/white_color</item>
@@ -9,47 +9,51 @@
     </style>
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">
-        <item name="android:textAppearance">@style/StyleTitle14</item>
+        <item name="android:textAppearance">@style/StyleTitle14Alternates</item>
         <item name="cornerRadius">@dimen/main_space_half_8</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="StyleTitle15" parent="TextAppearance.AppCompat">
+    <style name="StyleTitle20Caps" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/montserrat_alternates_semibold</item>
         <item name="android:textSize">@dimen/text_size_20</item>
         <item name="android:textColor">@color/deep_purple_color</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="StyleTitle16" parent="TextAppearance.AppCompat">
+    <style name="StyleTitle12" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:textColor">@color/dark_gray</item>
     </style>
 
-    <style name="StyleTitle17" parent="TextAppearance.AppCompat">
+    <style name="StyleTitle16" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/dark_gray</item>
     </style>
 
-    <style name="StyleTitle18" parent="TextAppearance.AppCompat">
+    <style name="StyleTitle14" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">@dimen/btn_text_size_14</item>
         <item name="android:textColor">@color/dark_gray</item>
     </style>
 
-    <style name="StyleTitle19" parent="TextAppearance.AppCompat">
-        <item name="android:textAppearance">@style/StyleTitle18</item>
+    <style name="StyleTitle14Caps" parent="@style/StyleTitle14">
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="StyleLabel" parent="@android:style/Widget.TextView">
-        <item name="android:textAppearance">@style/StyleTitle15</item>
+        <item name="android:textAppearance">@style/StyleTitle20Caps</item>
         <item name="cornerRadius">@dimen/main_space_half_8</item>
         <item name="android:background">@drawable/shape_rounded_label</item>
         <item name="android:padding">@dimen/indent_icon_btn_10</item>
+    </style>
+
+    <style name="styleSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
+        <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
     </style>
 
 </resources>

@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tvIngredientDescription"
-        style="@style/StyleTitle19"
+        style="@style/StyleTitle14Caps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/main_space_half_8"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/tvIngredientQuantity"
-        style="@style/StyleTitle19"
+        style="@style/StyleTitle14Caps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/main_space_half_8"
@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/tvIngredientUnitOfMeasure"
-        style="@style/StyleTitle19"
+        style="@style/StyleTitle14Caps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/main_space_half_8"

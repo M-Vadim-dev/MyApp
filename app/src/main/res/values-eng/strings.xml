@@ -7,5 +7,5 @@
     <string name="text_image_recipe_description">Recipe image %1$s</string>
     <string name="text_ingredients">Ingredients</string>
     <string name="text_cooking_method">Cooking method</string>
-    <string name="text_servings_seekbar">Servings:</string>
+    <string name="text_servings_seekbar">Servings: %1$s</string>
 </resources>
