@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/tvRecipeName"
-            style="@style/StyleTitle15"
+            style="@style/StyleTitle20Caps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/main_space_half_8"

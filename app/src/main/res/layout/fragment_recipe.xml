@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/tvIngredientsTitle"
-            style="@style/StyleTitle15"
+            style="@style/StyleTitle20Caps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/tvSeekBarServings"
-            style="@style/StyleTitle17"
+            style="@style/StyleTitle16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
@@ -63,8 +63,8 @@
             style="@style/styleSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="4" />
-
+            android:max="5"
+            android:min="1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
@@ -74,11 +74,12 @@
             android:background="@drawable/shape_rounded_label"
             android:backgroundTint="@color/white_color"
             android:padding="@dimen/main_space_half_8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_ingredient" />
 
         <TextView
             android:id="@+id/tvMethodTitle"
-            style="@style/StyleTitle15"
+            style="@style/StyleTitle20Caps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
@@ -93,7 +94,8 @@
             android:background="@drawable/shape_rounded_label"
             android:backgroundTint="@color/white_color"
             android:padding="@dimen/main_space_half_8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_method" />
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

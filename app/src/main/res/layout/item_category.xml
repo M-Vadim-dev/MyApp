@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/tvCategoryName"
-            style="@style/StyleTitle15"
+            style="@style/StyleTitle20Caps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/main_space_half_8"
@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/tvCategoryDescription"
-            style="@style/StyleTitle16"
+            style="@style/StyleTitle12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_half_8"
