@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -8,6 +9,8 @@ import com.example.myapp.databinding.ItemIngredientBinding
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
+
+    private var quantity: Int = 1
 
     class IngredientViewHolder(binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,11 +25,26 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
         return IngredientViewHolder(binding)
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(viewHolder: IngredientViewHolder, position: Int) {
         val ingredient = dataSet[position]
-        viewHolder.quantityTextView.text = ingredient.quantity
-        viewHolder.nameTextView.text = ingredient.description
-        viewHolder.unitOfMeasure.text = ingredient.unitOfMeasure
+
+        val calculatedQuantity = (ingredient.quantity.toDoubleOrNull() ?: 0.0) * quantity
+        val quantityText = if (calculatedQuantity % 1.0 == 0.0) {
+            calculatedQuantity.toInt().toString()
+        } else String.format("%.1f", calculatedQuantity)
+
+        with(viewHolder) {
+            quantityTextView.text = quantityText
+            nameTextView.text = ingredient.description
+            unitOfMeasure.text = ingredient.unitOfMeasure
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    internal fun updateIngredients(progress: Int) {
+        quantity = progress
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = dataSet.size

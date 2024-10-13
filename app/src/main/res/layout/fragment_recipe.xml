@@ -48,29 +48,23 @@
             android:text="@string/text_ingredients"
             android:textSize="@dimen/text_size_20" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/tvSeekBarServings"
+            style="@style/StyleTitle17"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_16"
-            android:layout_marginTop="@dimen/text_space_6"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginVertical="@dimen/text_space_6"
+            android:text="@string/text_servings_seekbar" />
 
-            <TextView
-                android:id="@+id/tvSeekBarServings"
-                style="@style/StyleTitle17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_servings_seekbar" />
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="@style/styleSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="4" />
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_space_6"
-                android:progressDrawable="@drawable/shape_seekbar"
-                android:thumb="@drawable/shape_seekbar_thumb" />
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
