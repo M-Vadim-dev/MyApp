@@ -36,6 +36,19 @@
                 app:layout_constraintBottom_toBottomOf="@+id/ivHeaderRecipe"
                 app:layout_constraintStart_toStartOf="@+id/ivHeaderRecipe"
                 tools:text="Бургер с грибами \nи сыром" />
+
+            <ImageButton
+                android:id="@+id/btnHeartFavourites"
+                android:layout_width="@dimen/btn_heart_40"
+                android:layout_height="@dimen/btn_heart_40"
+                android:layout_margin="@dimen/main_space_16"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/add_to_favourites"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivHeaderRecipe"
+                tools:src="@drawable/ic_heart" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

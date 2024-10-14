@@ -21,6 +21,7 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
+    private var isFavourite: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +56,23 @@ class RecipeFragment : Fragment() {
     private fun initUI(recipe: Recipe) {
         binding.tvLabelRecipe.text = recipe.title
         loadImageFromAssets(recipe.imageUrl)
+        binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart_empty)
+        binding.btnHeartFavourites.setOnClickListener {
+            isFavourite = !isFavourite
+            updateFavouriteButton(recipe.title)
+        }
+    }
+
+    private fun updateFavouriteButton(title: String) {
+        if (isFavourite) {
+            binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart)
+            binding.btnHeartFavourites.contentDescription =
+                getString(R.string.add_to_favourites, title)
+        } else {
+            binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart_empty)
+            binding.btnHeartFavourites.contentDescription =
+                getString(R.string.remove_from_favourites, title)
+        }
     }
 
     private fun initRecycler(recipe: Recipe) {
