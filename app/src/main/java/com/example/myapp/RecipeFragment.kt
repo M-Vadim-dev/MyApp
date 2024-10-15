@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -39,6 +40,7 @@ class RecipeFragment : Fragment() {
         recipe?.let {
             initUI(it)
             initRecycler(it)
+            setFavorites(it)
         }
     }
 
@@ -57,10 +59,6 @@ class RecipeFragment : Fragment() {
         binding.tvLabelRecipe.text = recipe.title
         loadImageFromAssets(recipe.imageUrl)
         binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart_empty)
-        binding.btnHeartFavourites.setOnClickListener {
-            isFavourite = !isFavourite
-            updateFavouriteButton(recipe.title)
-        }
     }
 
     private fun updateFavouriteButton(title: String) {
@@ -133,8 +131,49 @@ class RecipeFragment : Fragment() {
         }
     }
 
+    private fun saveFavorites(favoriteRecipeId: Set<String>) {
+        val sharedPrefs = activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        with(sharedPrefs?.edit()) {
+            this?.putStringSet(KEY_FAVORITE_RECIPES, favoriteRecipeId)
+            this?.apply()
+        }
+        Log.d("RecipeFragment", "Favorites updated: $favoriteRecipeId")
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val favoriteSet: Set<String>? = sharedPrefs?.getStringSet(KEY_FAVORITE_RECIPES, null)
+        return HashSet(favoriteSet ?: emptySet())
+    }
+
+    private fun setFavorites(recipe: Recipe) {
+        val favoriteSet = getFavorites()
+        isFavourite = favoriteSet.contains(recipe.id.toString())
+        updateFavouriteButton(recipe.title)
+
+        binding.btnHeartFavourites.setOnClickListener {
+            addRemoveFavorites(recipe.id.toString(), recipe.title)
+        }
+    }
+
+    private fun addRemoveFavorites(recipeId: String, title: String) {
+        val favoriteSet = getFavorites()
+        when {
+            favoriteSet.contains(recipeId) -> favoriteSet.remove(recipeId)
+            else -> favoriteSet.add(recipeId)
+        }
+        saveFavorites(favoriteSet)
+        isFavourite = favoriteSet.contains(recipeId)
+        updateFavouriteButton(title)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val PREFS_NAME = "app_preferences"
+        private const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }
 }
