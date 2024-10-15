@@ -2,6 +2,8 @@
     <string name="app_name">RecipeApp</string>
     <string name="button_category">Категории</string>
     <string name="button_favourites">Избранное</string>
+    <string name="add_to_favourites">Добавить %1$s в избранное</string>
+    <string name="remove_from_favourites">Удалить %1$s из избранного</string>
     <string name="text_category_description">Описание категории</string>
     <string name="text_image_description">Изображение категории %1$s</string>
     <string name="text_image_recipe_description">Изображение рецепта %1$s</string>
