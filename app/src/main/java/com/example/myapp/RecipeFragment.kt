@@ -22,7 +22,11 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
-    private var isFavourite: Boolean = false
+    private var isFavorite: Boolean = false
+
+    private val sharedPrefs by lazy {
+        activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +66,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun updateFavouriteButton(title: String) {
-        if (isFavourite) {
+        if (isFavorite) {
             binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart)
             binding.btnHeartFavourites.contentDescription =
                 getString(R.string.add_to_favourites, title)
@@ -132,23 +136,19 @@ class RecipeFragment : Fragment() {
     }
 
     private fun saveFavorites(favoriteRecipeId: Set<String>) {
-        val sharedPrefs = activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        with(sharedPrefs?.edit()) {
-            this?.putStringSet(KEY_FAVORITE_RECIPES, favoriteRecipeId)
-            this?.apply()
-        }
-        Log.d("RecipeFragment", "Favorites updated: $favoriteRecipeId")
+        sharedPrefs?.edit()
+            ?.putStringSet(KEY_FAVORITE_RECIPES, favoriteRecipeId)
+            ?.apply()
     }
 
     private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val favoriteSet: Set<String>? = sharedPrefs?.getStringSet(KEY_FAVORITE_RECIPES, null)
         return HashSet(favoriteSet ?: emptySet())
     }
 
     private fun setFavorites(recipe: Recipe) {
         val favoriteSet = getFavorites()
-        isFavourite = favoriteSet.contains(recipe.id.toString())
+        isFavorite = favoriteSet.contains(recipe.id.toString())
         updateFavouriteButton(recipe.title)
 
         binding.btnHeartFavourites.setOnClickListener {
@@ -158,12 +158,14 @@ class RecipeFragment : Fragment() {
 
     private fun addRemoveFavorites(recipeId: String, title: String) {
         val favoriteSet = getFavorites()
+        isFavorite = favoriteSet.contains(recipeId)
+
         when {
-            favoriteSet.contains(recipeId) -> favoriteSet.remove(recipeId)
+            isFavorite -> favoriteSet.remove(recipeId)
             else -> favoriteSet.add(recipeId)
         }
+
         saveFavorites(favoriteSet)
-        isFavourite = favoriteSet.contains(recipeId)
         updateFavouriteButton(title)
     }
 
