@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -21,7 +22,11 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
-    private var isFavourite: Boolean = false
+    private var isFavorite: Boolean = false
+
+    private val sharedPrefs by lazy {
+        activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +44,7 @@ class RecipeFragment : Fragment() {
         recipe?.let {
             initUI(it)
             initRecycler(it)
+            setFavorites(it)
         }
     }
 
@@ -57,14 +63,10 @@ class RecipeFragment : Fragment() {
         binding.tvLabelRecipe.text = recipe.title
         loadImageFromAssets(recipe.imageUrl)
         binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart_empty)
-        binding.btnHeartFavourites.setOnClickListener {
-            isFavourite = !isFavourite
-            updateFavouriteButton(recipe.title)
-        }
     }
 
     private fun updateFavouriteButton(title: String) {
-        if (isFavourite) {
+        if (isFavorite) {
             binding.btnHeartFavourites.setImageResource(R.drawable.ic_heart)
             binding.btnHeartFavourites.contentDescription =
                 getString(R.string.add_to_favourites, title)
@@ -133,8 +135,47 @@ class RecipeFragment : Fragment() {
         }
     }
 
+    private fun saveFavorites(favoriteRecipeId: Set<String>) {
+        sharedPrefs?.edit()
+            ?.putStringSet(KEY_FAVORITE_RECIPES, favoriteRecipeId)
+            ?.apply()
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val favoriteSet: Set<String>? = sharedPrefs?.getStringSet(KEY_FAVORITE_RECIPES, null)
+        return HashSet(favoriteSet ?: emptySet())
+    }
+
+    private fun setFavorites(recipe: Recipe) {
+        val favoriteSet = getFavorites()
+        isFavorite = favoriteSet.contains(recipe.id.toString())
+        updateFavouriteButton(recipe.title)
+
+        binding.btnHeartFavourites.setOnClickListener {
+            addRemoveFavorites(recipe.id.toString(), recipe.title)
+        }
+    }
+
+    private fun addRemoveFavorites(recipeId: String, title: String) {
+        val favoriteSet = getFavorites()
+        isFavorite = favoriteSet.contains(recipeId)
+
+        when {
+            isFavorite -> favoriteSet.remove(recipeId)
+            else -> favoriteSet.add(recipeId)
+        }
+
+        saveFavorites(favoriteSet)
+        updateFavouriteButton(title)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val PREFS_NAME = "app_preferences"
+        private const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }
 }
