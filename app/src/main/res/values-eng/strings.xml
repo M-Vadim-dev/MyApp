@@ -10,4 +10,5 @@
     <string name="text_cooking_method">Cooking method</string>
     <string name="text_servings_seekbar">Servings: %1$s</string>
     <string name="add_to_favourites">Add %1$s to favourites</string>
+    <string name="text_favorites">You have not added any recipes to favorites yet</string>
 </resources>
