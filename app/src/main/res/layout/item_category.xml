@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/main_space_half_8"
             android:textSize="@dimen/btn_text_size_14"
-            tools:text="@string/button_category" />
+            tools:text="@string/text_category" />
 
         <TextView
             android:id="@+id/tvCategoryDescription"

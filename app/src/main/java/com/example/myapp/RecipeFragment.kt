@@ -166,6 +166,7 @@ class RecipeFragment : Fragment() {
         }
 
         saveFavorites(favoriteSet)
+        isFavorite = !isFavorite
         updateFavouriteButton(title)
     }
 
@@ -175,7 +176,7 @@ class RecipeFragment : Fragment() {
     }
 
     companion object {
-        private const val PREFS_NAME = "app_preferences"
-        private const val KEY_FAVORITE_RECIPES = "favorite_recipes"
+        const val PREFS_NAME = "app_preferences"
+        const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }
 }
