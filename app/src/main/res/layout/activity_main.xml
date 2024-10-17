@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/indent_btn_2"
             android:backgroundTint="@color/deep_blue_color"
-            android:text="@string/button_category" />
+            android:text="@string/text_category" />
 
         <Button
             android:id="@+id/btnFavourites"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/indent_btn_2"
             android:backgroundTint="@color/vivid_red_color"
-            android:text="@string/button_favourites"
+            android:text="@string/text_favourites"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"
             app:iconPadding="@dimen/indent_icon_btn_10" />
