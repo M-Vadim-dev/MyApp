@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.example.myapp.ui.recipes.recipeList
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,10 +10,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_ID
-import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
-import com.example.myapp.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
+import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
+import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
+import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
+import com.example.myapp.R
+import com.example.myapp.data.STUB
 import com.example.myapp.databinding.FragmentRecipesListBinding
+import com.example.myapp.ui.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
 
