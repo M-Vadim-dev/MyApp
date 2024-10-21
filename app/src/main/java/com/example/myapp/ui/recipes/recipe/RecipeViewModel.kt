@@ -1,7 +1,7 @@
 package com.example.myapp.ui.recipes.recipe
 
 import androidx.lifecycle.ViewModel
-import com.example.myapp.data.Recipe
+import com.example.myapp.model.Recipe
 
 data class RecipeState(
     val recipe: Recipe? = null,

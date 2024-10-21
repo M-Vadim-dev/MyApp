@@ -1,5 +1,9 @@
 package com.example.myapp.data
 
+import com.example.myapp.model.Category
+import com.example.myapp.model.Ingredient
+import com.example.myapp.model.Recipe
+
 object STUB {
     private val categories = listOf(
         Category(0, "Бургеры", "Рецепты всех популярных видов бургеров", "burger.png"),

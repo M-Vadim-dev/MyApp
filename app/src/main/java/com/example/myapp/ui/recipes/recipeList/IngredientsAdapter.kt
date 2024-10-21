@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.databinding.ItemIngredientBinding
-import com.example.myapp.data.Ingredient
+import com.example.myapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 

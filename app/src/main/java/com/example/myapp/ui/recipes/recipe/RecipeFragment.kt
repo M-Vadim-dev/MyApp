@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
 import com.example.myapp.ui.recipes.recipeList.RecipesListFragment.Companion.ARG_RECIPE
 import com.example.myapp.databinding.FragmentRecipeBinding
-import com.example.myapp.data.Recipe
+import com.example.myapp.model.Recipe
 import com.example.myapp.ui.recipes.recipeList.IngredientsAdapter
 import com.example.myapp.ui.recipes.recipeList.MethodAdapter
 import com.google.android.material.divider.MaterialDividerItemDecoration
