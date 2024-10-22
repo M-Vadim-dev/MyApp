@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.example.myapp.ui.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.myapp.R
+import com.example.myapp.data.STUB
 import com.example.myapp.databinding.FragmentListCategoriesBinding
+import com.example.myapp.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
