@@ -18,6 +18,6 @@ class RecipeViewModel : ViewModel() {
 
     init {
         Log.i("!!!", "Initializing RecipeViewModel")
-        _state.value = RecipeState(isFavorite = true)
+        _state.value = RecipeState().copy(isFavorite = true)
     }
 }
