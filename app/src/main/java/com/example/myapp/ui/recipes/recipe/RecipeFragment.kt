@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
 import com.example.myapp.ui.recipes.recipeList.RecipesListFragment.Companion.ARG_RECIPE
@@ -28,6 +30,8 @@ class RecipeFragment : Fragment() {
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
     private var isFavorite: Boolean = false
 
+    private val viewModel: RecipeViewModel by viewModels()
+
     private val sharedPrefs by lazy {
         activity?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
@@ -43,6 +47,10 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.state.observe(viewLifecycleOwner) { recipeState ->
+            Log.i("!!!", "isFavorite: ${recipeState.isFavorite}")
+        }
 
         val recipe: Recipe? = getRecipeFromArguments()
         recipe?.let {
