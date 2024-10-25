@@ -26,7 +26,6 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
-    private var isFavorite: Boolean = false
 
     private val viewModel: RecipeViewModel by viewModels()
 
@@ -44,8 +43,8 @@ class RecipeFragment : Fragment() {
 
         val recipe: Recipe? = getRecipeFromArguments()
         recipe?.let {
-            initUI(it)
-            initRecycler(it)
+            initUI()
+            initRecycler()
             viewModel.loadRecipe(recipe.id)
         }
     }
@@ -61,28 +60,29 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun initUI(recipe: Recipe) {
+    private fun initUI() {
         viewModel.state.observe(viewLifecycleOwner) { recipeState ->
             Log.i("!!!", "isFavorite: ${recipeState.isFavorite}")
-            binding.tvLabelRecipe.text = recipe.title
-            loadImageFromAssets(recipe.imageUrl)
+            binding.tvLabelRecipe.text = recipeState.recipe?.title
+            loadImageFromAssets(recipeState.recipe?.imageUrl)
             binding.btnHeartFavourites.setImageResource(
                 if (recipeState.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
             )
             binding.btnHeartFavourites.contentDescription =
                 getString(
-                    if (isFavorite) R.string.remove_from_favourites else R.string.add_to_favourites,
-                    recipe.title
+                    if (recipeState.isFavorite) R.string.remove_from_favourites else R.string.add_to_favourites,
+                    recipeState.recipe?.title
                 )
             binding.btnHeartFavourites.setOnClickListener {
-                viewModel.onFavoritesClicked(recipe.id.toString())
+                viewModel.onFavoritesClicked(recipeState.recipe?.id.toString())
             }
+            binding.rvIngredients.adapter =
+                recipeState.recipe?.let { IngredientsAdapter(it.ingredients) }
+            binding.rvMethod.adapter = recipeState.recipe?.let { MethodAdapter(it.method) }
         }
     }
 
-    private fun initRecycler(recipe: Recipe) {
-        binding.rvIngredients.adapter = IngredientsAdapter(recipe.ingredients)
-        binding.rvMethod.adapter = MethodAdapter(recipe.method)
+    private fun initRecycler() {
         setupDivider()
         initSeekBar()
     }

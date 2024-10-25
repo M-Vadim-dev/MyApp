@@ -11,13 +11,13 @@ import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.KEY_FAVORITE
 import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.PREFS_NAME
 
 data class RecipeState(
-    val recipe: Recipe? = null,
+    var recipe: Recipe? = null,
     val isFavorite: Boolean = false,
     val portionsCount: Int = 1,
 )
 
 class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
-    private val _state = MutableLiveData<RecipeState>()
+    private val _state = MutableLiveData(RecipeState())
     val state: LiveData<RecipeState> get() = _state
 
     private val sharedPrefs by lazy {
@@ -33,10 +33,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         // TODO: load from network
         val isFavorite = getFavorites().contains(recipeId.toString())
         _state.value = _state.value?.let {
-            RecipeState().copy(
-                isFavorite = isFavorite,
-                portionsCount = it.portionsCount
-            )
+            it.copy(isFavorite = isFavorite, portionsCount = it.portionsCount)
         }
     }
 
