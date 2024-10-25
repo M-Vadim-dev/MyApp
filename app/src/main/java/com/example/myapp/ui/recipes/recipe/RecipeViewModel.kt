@@ -11,7 +11,7 @@ import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.KEY_FAVORITE
 import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.PREFS_NAME
 
 data class RecipeState(
-    var recipe: Recipe? = null,
+    val recipe: Recipe? = null,
     val isFavorite: Boolean = false,
     val portionsCount: Int = 1,
 )
