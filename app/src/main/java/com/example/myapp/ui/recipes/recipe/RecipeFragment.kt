@@ -1,6 +1,5 @@
 package com.example.myapp.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
