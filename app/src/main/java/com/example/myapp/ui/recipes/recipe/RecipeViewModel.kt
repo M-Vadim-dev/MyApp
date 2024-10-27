@@ -38,6 +38,10 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         _state.value = _state.value?.copy(isFavorite = isFavorite)
     }
 
+    internal fun updatePortionCount(portionsCount: Int) {
+        _state.value = _state.value?.copy(portionsCount = portionsCount)
+    }
+
     private fun getFavorites(): MutableSet<String> {
         val favoriteSet: Set<String>? =
             sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, null)
@@ -64,12 +68,16 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
 
     private fun loadImageFromAssets(recipeId: Int): Drawable? {
         return try {
-            application.assets.open("recipes/$recipeId.png").use { stream ->
+            application.assets.open(PATH_TEMPLATE.format(recipeId)).use { stream ->
                 Drawable.createFromStream(stream, null)
             }
         } catch (e: Exception) {
             Log.e("RecipeViewModel", "Error loading image for recipe ID: $recipeId", e)
             null
         }
+    }
+
+    private companion object {
+        const val PATH_TEMPLATE = "recipes/%s.png"
     }
 }

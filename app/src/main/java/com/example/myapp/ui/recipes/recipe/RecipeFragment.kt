@@ -43,7 +43,6 @@ class RecipeFragment : Fragment() {
         val recipe: Recipe? = getRecipeFromArguments()
         recipe?.let {
             initUI()
-            initRecycler()
             viewModel.loadRecipe(recipe.id)
         }
     }
@@ -78,12 +77,18 @@ class RecipeFragment : Fragment() {
             binding.rvIngredients.adapter =
                 recipeState.recipe?.let { IngredientsAdapter(it.ingredients) }
             binding.rvMethod.adapter = recipeState.recipe?.let { MethodAdapter(it.method) }
-        }
-    }
 
-    private fun initRecycler() {
-        setupDivider()
+            binding.rvIngredients.adapter =
+                recipeState.recipe?.let { IngredientsAdapter(it.ingredients) }
+            binding.rvMethod.adapter = recipeState.recipe?.let { MethodAdapter(it.method) }
+
+            (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(recipeState.portionsCount)
+
+            binding.tvSeekBarServings.text =
+                getString(R.string.text_servings_seekbar, recipeState.portionsCount.toString())
+        }
         initSeekBar()
+        setupDivider()
     }
 
     private fun initSeekBar() {
@@ -94,14 +99,12 @@ class RecipeFragment : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.tvSeekBarServings.text =
                     getString(R.string.text_servings_seekbar, progress.toString())
-                (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(progress)
+                viewModel.updatePortionCount(progress)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
 
