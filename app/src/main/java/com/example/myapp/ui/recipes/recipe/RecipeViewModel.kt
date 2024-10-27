@@ -2,6 +2,7 @@ package com.example.myapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -14,6 +15,7 @@ data class RecipeState(
     val recipe: Recipe? = null,
     val isFavorite: Boolean = false,
     val portionsCount: Int = 1,
+    val recipeImage: Drawable? = null,
 )
 
 class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
@@ -32,9 +34,8 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     internal fun loadRecipe(recipeId: Int) {
         // TODO: load from network
         val isFavorite = getFavorites().contains(recipeId.toString())
-        _state.value = _state.value?.let {
-            it.copy(isFavorite = isFavorite, portionsCount = it.portionsCount)
-        }
+        val recipeImage = loadImageFromAssets(recipeId)
+        _state.value = _state.value?.copy(isFavorite = isFavorite)
     }
 
     private fun getFavorites(): MutableSet<String> {
@@ -59,5 +60,16 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     private fun saveFavorites(favoriteRecipeId: Set<String>) {
         sharedPrefs.edit().putStringSet(KEY_FAVORITE_RECIPES, favoriteRecipeId)
             .apply()
+    }
+
+    private fun loadImageFromAssets(recipeId: Int): Drawable? {
+        return try {
+            application.assets.open("recipes/$recipeId.png").use { stream ->
+                Drawable.createFromStream(stream, null)
+            }
+        } catch (e: Exception) {
+            Log.e("RecipeViewModel", "Error loading image for recipe ID: $recipeId", e)
+            null
+        }
     }
 }

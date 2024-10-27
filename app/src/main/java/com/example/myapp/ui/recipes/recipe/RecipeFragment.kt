@@ -64,7 +64,7 @@ class RecipeFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { recipeState ->
             Log.i("!!!", "isFavorite: ${recipeState.isFavorite}")
             binding.tvLabelRecipe.text = recipeState.recipe?.title
-            loadImageFromAssets(recipeState.recipe?.imageUrl)
+            binding.ivHeaderRecipe.setImageDrawable(recipeState.recipeImage)
             binding.btnHeartFavourites.setImageResource(
                 if (recipeState.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
             )
@@ -119,23 +119,6 @@ class RecipeFragment : Fragment() {
             }
         binding.rvMethod.addItemDecoration(dividerItemDecoration)
         binding.rvIngredients.addItemDecoration(dividerItemDecoration)
-    }
-
-    private fun loadImageFromAssets(imageFileName: String?) {
-        if (imageFileName != null) {
-            val drawable = try {
-                requireContext().assets.open(imageFileName).use { stream ->
-                    Drawable.createFromStream(stream, null)
-                }
-            } catch (e: Exception) {
-                Log.e("RecipeFragment", "Error loading image: $imageFileName", e)
-                null
-            }
-            binding.ivHeaderRecipe.setImageDrawable(drawable)
-        } else {
-            Log.e("RecipeFragment", "Image file name is null")
-            binding.ivHeaderRecipe.setImageDrawable(null)
-        }
     }
 
     override fun onDestroyView() {
