@@ -78,10 +78,6 @@ class RecipeFragment : Fragment() {
                 recipeState.recipe?.let { IngredientsAdapter(it.ingredients) }
             binding.rvMethod.adapter = recipeState.recipe?.let { MethodAdapter(it.method) }
 
-            binding.rvIngredients.adapter =
-                recipeState.recipe?.let { IngredientsAdapter(it.ingredients) }
-            binding.rvMethod.adapter = recipeState.recipe?.let { MethodAdapter(it.method) }
-
             (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(recipeState.portionsCount)
 
             binding.tvSeekBarServings.text =

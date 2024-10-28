@@ -35,7 +35,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         // TODO: load from network
         val isFavorite = getFavorites().contains(recipeId.toString())
         val recipeImage = loadImageFromAssets(recipeId)
-        _state.value = _state.value?.copy(isFavorite = isFavorite)
+        _state.value = _state.value?.copy(isFavorite = isFavorite, recipeImage = recipeImage)
     }
 
     internal fun updatePortionCount(portionsCount: Int) {
