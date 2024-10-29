@@ -80,6 +80,6 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     }
 
     private companion object {
-        const val PATH_TEMPLATE = "recipes/%s.png"
+        const val PATH_TEMPLATE = "recipes/%d.png"
     }
 }
