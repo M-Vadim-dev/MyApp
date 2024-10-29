@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.myapp.data.STUB
 import com.example.myapp.model.Recipe
 import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.KEY_FAVORITE_RECIPES
 import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.PREFS_NAME
@@ -33,9 +34,14 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
 
     internal fun loadRecipe(recipeId: Int) {
         // TODO: load from network
+        val recipe = STUB.getRecipeById(recipeId)
         val isFavorite = getFavorites().contains(recipeId.toString())
         val recipeImage = loadImageFromAssets(recipeId)
-        _state.value = _state.value?.copy(isFavorite = isFavorite)
+        _state.value = _state.value?.copy(recipe = recipe, isFavorite = isFavorite, recipeImage = recipeImage)
+    }
+
+    internal fun updatePortionCount(portionsCount: Int) {
+        _state.value = _state.value?.copy(portionsCount = portionsCount)
     }
 
     private fun getFavorites(): MutableSet<String> {
@@ -64,12 +70,16 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
 
     private fun loadImageFromAssets(recipeId: Int): Drawable? {
         return try {
-            application.assets.open("recipes/$recipeId.png").use { stream ->
+            application.assets.open(PATH_TEMPLATE.format(recipeId)).use { stream ->
                 Drawable.createFromStream(stream, null)
             }
         } catch (e: Exception) {
             Log.e("RecipeViewModel", "Error loading image for recipe ID: $recipeId", e)
             null
         }
+    }
+
+    private companion object {
+        const val PATH_TEMPLATE = "recipes/%d.png"
     }
 }
