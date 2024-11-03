@@ -27,6 +27,8 @@ class RecipeFragment : Fragment() {
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
 
     private val viewModel: RecipeViewModel by viewModels()
+    private val ingredientsAdapter: IngredientsAdapter by lazy { IngredientsAdapter(emptyList()) }
+    private val methodsAdapter: MethodAdapter by lazy { MethodAdapter(emptyList()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,10 +61,17 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
+        binding.rvIngredients.adapter = ingredientsAdapter
+        binding.rvMethod.adapter = methodsAdapter
+
         viewModel.state.observe(viewLifecycleOwner) { recipeState ->
             Log.i("!!!", "isFavorite: ${recipeState.isFavorite}")
             binding.tvLabelRecipe.text = recipeState.recipe?.title
             binding.ivHeaderRecipe.setImageDrawable(recipeState.recipeImage)
+
+            ingredientsAdapter.ingredients = recipeState.recipe?.ingredients ?: emptyList()
+            methodsAdapter.methods = recipeState.recipe?.method ?: emptyList()
+
             binding.btnHeartFavourites.setImageResource(
                 if (recipeState.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
             )
@@ -74,15 +83,13 @@ class RecipeFragment : Fragment() {
             binding.btnHeartFavourites.setOnClickListener {
                 viewModel.onFavoritesClicked(recipeState.recipe?.id.toString())
             }
-            binding.rvIngredients.adapter =
-                recipeState.recipe?.let { IngredientsAdapter(it.ingredients) }
-            binding.rvMethod.adapter = recipeState.recipe?.let { MethodAdapter(it.method) }
-
-            (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(recipeState.portionsCount)
 
             binding.tvSeekBarServings.text =
                 getString(R.string.text_servings_seekbar, recipeState.portionsCount.toString())
+
+            (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(recipeState.portionsCount)
         }
+
         initSeekBar()
         setupDivider()
     }
@@ -90,18 +97,22 @@ class RecipeFragment : Fragment() {
     private fun initSeekBar() {
         binding.tvSeekBarServings.text = getString(R.string.text_servings_seekbar, "1")
 
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                binding.tvSeekBarServings.text =
-                    getString(R.string.text_servings_seekbar, progress.toString())
-                viewModel.updatePortionCount(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        binding.seekBar.setOnSeekBarChangeListener(PortionSeekBarListener { progress ->
+            binding.tvSeekBarServings.text =
+                getString(R.string.text_servings_seekbar, progress.toString())
+            viewModel.updatePortionCount(progress)
         })
+    }
+
+    private class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
+        SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            onChangeIngredients(progress)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     }
 
     private fun setupDivider() {
