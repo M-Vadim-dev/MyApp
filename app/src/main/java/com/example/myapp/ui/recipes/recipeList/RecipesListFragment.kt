@@ -10,12 +10,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
-import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
-import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
+import androidx.fragment.app.viewModels
 import com.example.myapp.R
 import com.example.myapp.data.STUB
 import com.example.myapp.databinding.FragmentRecipesListBinding
+import com.example.myapp.model.Recipe
+import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
+import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
+import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
 import com.example.myapp.ui.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
@@ -28,6 +30,8 @@ class RecipesListFragment : Fragment() {
     private var categoryId: Int? = null
     private var categoryName: String? = null
     private var categoryImageUrl: String? = null
+
+    private val viewModel: RecipesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +55,12 @@ class RecipesListFragment : Fragment() {
         loadImageFromAssets(categoryImageUrl)
         binding.ivHeaderRecipes.contentDescription =
             getString(R.string.text_image_recipe_description, categoryName)
-        initRecycler()
+
+        viewModel.loadRecipes(categoryId ?: 0)
+
+        viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
+            initRecycler(recipes)
+        }
     }
 
     private fun loadImageFromAssets(imageFileName: String?) {
@@ -71,8 +80,8 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun initRecycler() {
-        val adapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId ?: 0))
+    private fun initRecycler(recipes: List<Recipe>) {
+        val adapter = RecipesListAdapter(recipes)
         binding.rvRecipes.adapter = adapter
 
         adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {

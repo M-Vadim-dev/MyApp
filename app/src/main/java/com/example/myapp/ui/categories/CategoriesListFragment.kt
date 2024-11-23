@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.example.myapp.R
-import com.example.myapp.data.STUB
 import com.example.myapp.databinding.FragmentListCategoriesBinding
+import com.example.myapp.model.Category
 import com.example.myapp.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
@@ -19,6 +20,8 @@ class CategoriesListFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentListCategoriesBinding must not be null")
+
+    private val viewModel: CategoriesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,11 +34,14 @@ class CategoriesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+
+        viewModel.categories.observe(viewLifecycleOwner) { categories ->
+            initRecycler(categories)
+        }
     }
 
-    private fun initRecycler() {
-        val adapter = CategoriesListAdapter(STUB.getCategories())
+    private fun initRecycler(categories: List<Category>) {
+        val adapter = CategoriesListAdapter(categories)
         binding.rvCategories.adapter = adapter
 
         adapter.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
@@ -46,8 +52,8 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val categoryName = STUB.getCategories().find { it.id == categoryId }?.title
-        val categoryImageUrl = STUB.getCategories().find { it.id == categoryId }?.imageUrl
+        val categoryName = viewModel.categories.value?.find { it.id == categoryId }?.title
+        val categoryImageUrl = viewModel.categories.value?.find { it.id == categoryId }?.imageUrl
 
         val bundle = bundleOf(
             ARG_CATEGORY_ID to categoryId,

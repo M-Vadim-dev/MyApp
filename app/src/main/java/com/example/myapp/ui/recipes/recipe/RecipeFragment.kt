@@ -66,42 +66,40 @@ class RecipeFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) { recipeState ->
             Log.i("!!!", "isFavorite: ${recipeState.isFavorite}")
-            binding.tvLabelRecipe.text = recipeState.recipe?.title
-            binding.ivHeaderRecipe.setImageDrawable(recipeState.recipeImage)
 
-            ingredientsAdapter.ingredients = recipeState.recipe?.ingredients ?: emptyList()
-            methodsAdapter.methods = recipeState.recipe?.method ?: emptyList()
+            recipeState.recipe?.let { recipe ->
+                binding.tvLabelRecipe.text = recipe.title
+                binding.ivHeaderRecipe.setImageDrawable(recipeState.recipeImage)
 
-            binding.btnHeartFavourites.setImageResource(
-                if (recipeState.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
-            )
-            binding.btnHeartFavourites.contentDescription =
-                getString(
-                    if (recipeState.isFavorite) R.string.remove_from_favourites else R.string.add_to_favourites,
-                    recipeState.recipe?.title
+                ingredientsAdapter.ingredients = recipe.ingredients
+                methodsAdapter.methods = recipe.method
+
+                binding.btnHeartFavourites.setImageResource(
+                    if (recipeState.isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
                 )
-            binding.btnHeartFavourites.setOnClickListener {
-                viewModel.onFavoritesClicked(recipeState.recipe?.id.toString())
+                binding.btnHeartFavourites.contentDescription =
+                    getString(
+                        if (recipeState.isFavorite) R.string.remove_from_favourites else R.string.add_to_favourites,
+                        recipeState.recipe.title
+                    )
+                binding.btnHeartFavourites.setOnClickListener {
+                    viewModel.onFavoritesClicked(recipeState.recipe.id.toString())
+                }
+
+                binding.tvSeekBarServings.text =
+                    getString(R.string.text_servings_seekbar, recipeState.portionsCount.toString())
+
+                (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(
+                    recipeState.portionsCount
+                )
             }
-
-            binding.tvSeekBarServings.text =
-                getString(R.string.text_servings_seekbar, recipeState.portionsCount.toString())
-
-            (binding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(recipeState.portionsCount)
         }
 
-        initSeekBar()
-        setupDivider()
-    }
-
-    private fun initSeekBar() {
-        binding.tvSeekBarServings.text = getString(R.string.text_servings_seekbar, "1")
-
         binding.seekBar.setOnSeekBarChangeListener(PortionSeekBarListener { progress ->
-            binding.tvSeekBarServings.text =
-                getString(R.string.text_servings_seekbar, progress.toString())
             viewModel.updatePortionCount(progress)
         })
+
+        setupDivider()
     }
 
     private class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
