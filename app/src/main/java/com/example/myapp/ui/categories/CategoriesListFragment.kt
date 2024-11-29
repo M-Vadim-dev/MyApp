@@ -22,6 +22,7 @@ class CategoriesListFragment : Fragment() {
             ?: throw IllegalStateException("Binding for FragmentListCategoriesBinding must not be null")
 
     private val viewModel: CategoriesListViewModel by viewModels()
+    private val categoriesAdapter: CategoriesListAdapter by lazy { CategoriesListAdapter(emptyList()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,30 +36,25 @@ class CategoriesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvCategories.adapter = categoriesAdapter
+
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
-            initRecycler(categories)
+            categoriesAdapter.updateDataSet(categories)
+
+            categoriesAdapter.setOnItemClickListener(object :
+                CategoriesListAdapter.OnItemClickListener {
+                override fun onItemClick(category: Category) {
+                    openRecipesByCategory(category)
+                }
+            })
         }
     }
 
-    private fun initRecycler(categories: List<Category>) {
-        val adapter = CategoriesListAdapter(categories)
-        binding.rvCategories.adapter = adapter
-
-        adapter.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
-            }
-        })
-    }
-
-    private fun openRecipesByCategoryId(categoryId: Int) {
-        val categoryName = viewModel.categories.value?.find { it.id == categoryId }?.title
-        val categoryImageUrl = viewModel.categories.value?.find { it.id == categoryId }?.imageUrl
-
+    private fun openRecipesByCategory(category: Category) {
         val bundle = bundleOf(
-            ARG_CATEGORY_ID to categoryId,
-            ARG_CATEGORY_NAME to categoryName,
-            ARG_CATEGORY_IMAGE_URL to categoryImageUrl
+            ARG_CATEGORY_ID to category.id,
+            ARG_CATEGORY_NAME to category.title,
+            ARG_CATEGORY_IMAGE_URL to category.imageUrl
         )
 
         parentFragmentManager.commit {

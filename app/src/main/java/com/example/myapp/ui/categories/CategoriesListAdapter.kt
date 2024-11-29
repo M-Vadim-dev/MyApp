@@ -11,11 +11,11 @@ import com.example.myapp.R
 import com.example.myapp.databinding.ItemCategoryBinding
 import com.example.myapp.model.Category
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(categoryId: Int)
+        fun onItemClick(category: Category)
     }
 
     private var itemClickListener: OnItemClickListener? = null
@@ -60,9 +60,13 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
                 category.title
             )
 
-        viewHolder.itemView.setOnClickListener { itemClickListener?.onItemClick(category.id) }
+        viewHolder.itemView.setOnClickListener { itemClickListener?.onItemClick(category) }
     }
 
     override fun getItemCount(): Int = dataSet.size
 
+    fun updateDataSet(newDataSet: List<Category>) {
+        dataSet = newDataSet
+        notifyDataSetChanged()
+    }
 }

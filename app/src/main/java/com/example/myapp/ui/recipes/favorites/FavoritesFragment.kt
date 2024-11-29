@@ -1,7 +1,6 @@
 package com.example.myapp.ui.recipes.favorites
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.example.myapp.R
-import com.example.myapp.data.STUB
 import com.example.myapp.ui.recipes.recipeList.RecipesListFragment.Companion.ARG_RECIPE
 import com.example.myapp.databinding.FragmentFavoritesBinding
 import com.example.myapp.model.Recipe
@@ -26,10 +24,9 @@ class FavoritesFragment : Fragment() {
             ?: throw IllegalStateException("Binding for FragmentFavoritesBinding must not be null")
 
     private val viewModel: FavoritesViewModel by viewModels {
-        FavoritesViewModel.FavoritesViewModelFactory(
-            requireContext()
-        )
+        FavoritesViewModel.FavoritesViewModelFactory(requireContext())
     }
+    private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,14 +40,15 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvFavorites.adapter = adapter
+
         viewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
             initRecycler(recipes)
         }
     }
 
     private fun initRecycler(recipes: List<Recipe>) {
-        val adapter = RecipesListAdapter(recipes)
-        binding.rvFavorites.adapter = adapter
+        adapter.updateDataSet(recipes)
 
         if (recipes.isEmpty()) {
             binding.tvFavorites.visibility = View.VISIBLE
@@ -61,22 +59,19 @@ class FavoritesFragment : Fragment() {
         }
 
         adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
-            override fun onItemClick(recipeId: Int) {
-                openRecipeByRecipeId(recipeId)
+            override fun onItemClick(recipe: Recipe) {
+                openRecipeByRecipe(recipe)
             }
         })
     }
 
-    private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
-        if (recipe != null) {
-            val bundle = bundleOf(ARG_RECIPE to recipe)
-            parentFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-                addToBackStack(null)
-            }
-        } else Log.e("FavoritesFragment", "Recipe not found for ID: $recipeId")
+    private fun openRecipeByRecipe(recipe: Recipe) {
+        val bundle = bundleOf(ARG_RECIPE to recipe)
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
+            addToBackStack(null)
+        }
     }
 
     override fun onDestroyView() {

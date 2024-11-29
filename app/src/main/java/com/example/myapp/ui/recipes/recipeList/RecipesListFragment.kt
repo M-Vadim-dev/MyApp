@@ -12,7 +12,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.example.myapp.R
-import com.example.myapp.data.STUB
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
@@ -32,6 +31,7 @@ class RecipesListFragment : Fragment() {
     private var categoryImageUrl: String? = null
 
     private val viewModel: RecipesListViewModel by viewModels()
+    private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,8 +58,16 @@ class RecipesListFragment : Fragment() {
 
         viewModel.loadRecipes(categoryId ?: 0)
 
+        binding.rvRecipes.adapter = adapter
+
         viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
-            initRecycler(recipes)
+            adapter.updateDataSet(recipes)
+
+            adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
+                override fun onItemClick(recipe: Recipe) {
+                    openRecipeByRecipe(recipe)
+                }
+            })
         }
     }
 
@@ -80,27 +88,13 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun initRecycler(recipes: List<Recipe>) {
-        val adapter = RecipesListAdapter(recipes)
-        binding.rvRecipes.adapter = adapter
-
-        adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
-            override fun onItemClick(recipeId: Int) {
-                openRecipeByRecipeId(recipeId)
-            }
-        })
-    }
-
-    private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
-        if (recipe != null) {
-            val bundle = bundleOf(ARG_RECIPE to recipe)
-            parentFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-                addToBackStack(null)
-            }
-        } else Log.e("RecipesListFragment", "Recipe not found for ID: $recipeId")
+    private fun openRecipeByRecipe(recipe: Recipe) {
+        val bundle = bundleOf(ARG_RECIPE to recipe)
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
+            addToBackStack(null)
+        }
     }
 
     override fun onDestroyView() {
