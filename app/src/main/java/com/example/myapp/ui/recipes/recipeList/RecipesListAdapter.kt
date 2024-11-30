@@ -11,11 +11,11 @@ import com.example.myapp.R
 import com.example.myapp.databinding.ItemRecipeBinding
 import com.example.myapp.model.Recipe
 
-class RecipesListAdapter(private val dataSet: List<Recipe>) :
+class RecipesListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipesListAdapter.RecipeViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(recipeId: Int)
+        fun onItemClick(recipe: Recipe)
     }
 
     private var itemClickListener: OnItemClickListener? = null
@@ -58,8 +58,13 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
                 recipe.title
             )
 
-        viewHolder.itemView.setOnClickListener { itemClickListener?.onItemClick(recipe.id) }
+        viewHolder.itemView.setOnClickListener { itemClickListener?.onItemClick(recipe) }
     }
 
     override fun getItemCount(): Int = dataSet.size
+
+    internal fun updateDataSet(newDataSet: List<Recipe>) {
+        dataSet = newDataSet
+        notifyDataSetChanged()
+    }
 }

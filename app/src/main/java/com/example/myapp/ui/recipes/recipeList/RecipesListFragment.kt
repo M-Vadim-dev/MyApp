@@ -10,12 +10,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
+import com.example.myapp.R
+import com.example.myapp.databinding.FragmentRecipesListBinding
+import com.example.myapp.model.Recipe
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
-import com.example.myapp.R
-import com.example.myapp.data.STUB
-import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.ui.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
@@ -28,6 +29,9 @@ class RecipesListFragment : Fragment() {
     private var categoryId: Int? = null
     private var categoryName: String? = null
     private var categoryImageUrl: String? = null
+
+    private val viewModel: RecipesListViewModel by viewModels()
+    private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +55,20 @@ class RecipesListFragment : Fragment() {
         loadImageFromAssets(categoryImageUrl)
         binding.ivHeaderRecipes.contentDescription =
             getString(R.string.text_image_recipe_description, categoryName)
-        initRecycler()
+
+        viewModel.loadRecipes(categoryId ?: 0)
+
+        binding.rvRecipes.adapter = adapter
+
+        viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
+            adapter.updateDataSet(recipes)
+
+            adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
+                override fun onItemClick(recipe: Recipe) {
+                    openRecipeByRecipe(recipe)
+                }
+            })
+        }
     }
 
     private fun loadImageFromAssets(imageFileName: String?) {
@@ -71,27 +88,13 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun initRecycler() {
-        val adapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId ?: 0))
-        binding.rvRecipes.adapter = adapter
-
-        adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
-            override fun onItemClick(recipeId: Int) {
-                openRecipeByRecipeId(recipeId)
-            }
-        })
-    }
-
-    private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
-        if (recipe != null) {
-            val bundle = bundleOf(ARG_RECIPE to recipe)
-            parentFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-                addToBackStack(null)
-            }
-        } else Log.e("RecipesListFragment", "Recipe not found for ID: $recipeId")
+    private fun openRecipeByRecipe(recipe: Recipe) {
+        val bundle = bundleOf(ARG_RECIPE to recipe)
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
+            addToBackStack(null)
+        }
     }
 
     override fun onDestroyView() {
