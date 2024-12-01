@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnFavourites.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.favoritesFragment)
+            findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_favorites)
         }
 
         binding.btnCategory.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.categoriesListFragment)
+            findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_category)
         }
     }
 }

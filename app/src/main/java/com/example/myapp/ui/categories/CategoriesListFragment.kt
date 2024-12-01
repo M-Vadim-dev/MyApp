@@ -54,7 +54,10 @@ class CategoriesListFragment : Fragment() {
             ARG_CATEGORY_NAME to category.title,
             ARG_CATEGORY_IMAGE_URL to category.imageUrl
         )
-        findNavController().navigate(R.id.recipesListFragment, bundle)
+        findNavController().navigate(
+            R.id.action_categoriesListFragment_to_recipesListFragment,
+            bundle
+        )
     }
 
     override fun onDestroyView() {
