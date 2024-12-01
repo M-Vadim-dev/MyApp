@@ -21,6 +21,10 @@ class FavoritesViewModel(private val context: Context) : ViewModel() {
         _favoriteRecipes.value = STUB.getRecipesByIds(favoriteIds)
     }
 
+    fun refreshFavorites() {
+        loadFavorites()
+    }
+
     private fun getFavorites(): Set<Int> {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val favoriteSet: Set<String>? = sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, null)

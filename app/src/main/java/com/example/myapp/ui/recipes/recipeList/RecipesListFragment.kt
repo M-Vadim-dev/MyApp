@@ -8,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
 import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
-import com.example.myapp.ui.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
 
@@ -38,7 +36,7 @@ class RecipesListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRecipesListBinding.inflate(inflater, container, false)
+        _binding = FragmentRecipesListBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -90,11 +88,7 @@ class RecipesListFragment : Fragment() {
 
     private fun openRecipeByRecipe(recipe: Recipe) {
         val bundle = bundleOf(ARG_RECIPE to recipe)
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.action_recipesListFragment_to_recipeFragment, bundle)
     }
 
     override fun onDestroyView() {

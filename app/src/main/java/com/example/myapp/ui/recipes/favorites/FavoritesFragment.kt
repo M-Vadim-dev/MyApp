@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.navigation.fragment.findNavController
 import com.example.myapp.R
-import com.example.myapp.ui.recipes.recipeList.RecipesListFragment.Companion.ARG_RECIPE
 import com.example.myapp.databinding.FragmentFavoritesBinding
 import com.example.myapp.model.Recipe
-import com.example.myapp.ui.recipes.recipe.RecipeFragment
 import com.example.myapp.ui.recipes.recipeList.RecipesListAdapter
+import com.example.myapp.ui.recipes.recipeList.RecipesListFragment.Companion.ARG_RECIPE
 
 class FavoritesFragment : Fragment() {
 
@@ -33,7 +31,7 @@ class FavoritesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoritesBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -45,6 +43,7 @@ class FavoritesFragment : Fragment() {
         viewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
             initRecycler(recipes)
         }
+        viewModel.refreshFavorites()
     }
 
     private fun initRecycler(recipes: List<Recipe>) {
@@ -67,11 +66,7 @@ class FavoritesFragment : Fragment() {
 
     private fun openRecipeByRecipe(recipe: Recipe) {
         val bundle = bundleOf(ARG_RECIPE to recipe)
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.action_favoritesFragment_to_recipeFragment, bundle)
     }
 
     override fun onDestroyView() {

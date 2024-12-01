@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.navigation.fragment.findNavController
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentListCategoriesBinding
 import com.example.myapp.model.Category
-import com.example.myapp.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
@@ -29,7 +27,7 @@ class CategoriesListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
+        _binding = FragmentListCategoriesBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -56,12 +54,10 @@ class CategoriesListFragment : Fragment() {
             ARG_CATEGORY_NAME to category.title,
             ARG_CATEGORY_IMAGE_URL to category.imageUrl
         )
-
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
-            addToBackStack(null)
-        }
+        findNavController().navigate(
+            R.id.action_categoriesListFragment_to_recipesListFragment,
+            bundle
+        )
     }
 
     override fun onDestroyView() {
