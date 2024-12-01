@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -63,10 +62,16 @@ class RecipesListFragment : Fragment() {
 
             adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipe: Recipe) {
-                    openRecipeByRecipe(recipe)
+                    navigateToRecipe(recipe.id)
                 }
             })
         }
+    }
+
+    private fun navigateToRecipe(recipeId: Int) {
+        val action =
+            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(recipeId)
+        findNavController().navigate(action)
     }
 
     private fun loadImageFromAssets(imageFileName: String?) {
@@ -86,17 +91,8 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun openRecipeByRecipe(recipe: Recipe) {
-        val bundle = bundleOf(ARG_RECIPE to recipe)
-        findNavController().navigate(R.id.action_recipesListFragment_to_recipeFragment, bundle)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val ARG_RECIPE = "arg_recipe"
     }
 }

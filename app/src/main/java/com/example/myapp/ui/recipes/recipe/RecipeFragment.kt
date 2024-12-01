@@ -1,6 +1,5 @@
 package com.example.myapp.ui.recipes.recipe
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +8,12 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentRecipeBinding
-import com.example.myapp.model.Recipe
 import com.example.myapp.ui.recipes.recipeList.IngredientsAdapter
 import com.example.myapp.ui.recipes.recipeList.MethodAdapter
-import com.example.myapp.ui.recipes.recipeList.RecipesListFragment.Companion.ARG_RECIPE
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
@@ -28,6 +26,7 @@ class RecipeFragment : Fragment() {
     private val viewModel: RecipeViewModel by viewModels()
     private val ingredientsAdapter: IngredientsAdapter by lazy { IngredientsAdapter(emptyList()) }
     private val methodsAdapter: MethodAdapter by lazy { MethodAdapter(emptyList()) }
+    private val args: RecipeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,22 +40,8 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipe: Recipe? = getRecipeFromArguments()
-        recipe?.let {
-            initUI()
-            viewModel.loadRecipe(recipe.id)
-        }
-    }
-
-    private fun getRecipeFromArguments(): Recipe? {
-        return requireArguments().let { bundle ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getParcelable(ARG_RECIPE, Recipe::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                bundle.getParcelable(ARG_RECIPE)
-            }
-        }
+        initUI()
+        viewModel.loadRecipe(args.recipeId)
     }
 
     private fun initUI() {
@@ -128,10 +113,5 @@ class RecipeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val PREFS_NAME = "app_preferences"
-        const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }
 }

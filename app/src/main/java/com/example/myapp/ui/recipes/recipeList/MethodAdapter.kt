@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.databinding.ItemMethodBinding
 
-class MethodAdapter(var dataSet: List<String>) :
+class MethodAdapter(private var dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.MethodViewHolder>() {
 
     var methods: List<String>

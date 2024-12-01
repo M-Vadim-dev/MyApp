@@ -36,7 +36,17 @@
         android:id="@+id/recipeFragment"
         android:name="com.example.myapp.ui.recipes.recipe.RecipeFragment"
         android:label="RecipeFragment"
-        tools:layout="@layout/fragment_recipe" />
+        tools:layout="@layout/fragment_recipe">
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_args_recipeFragment_to_recipesListFragment"
+            app:destination="@id/recipesListFragment" />
+        <action
+            android:id="@+id/action_recipeFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_category"
         app:destination="@id/categoriesListFragment"
