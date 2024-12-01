@@ -2,7 +2,6 @@ package com.example.myapp.ui.recipes.recipe
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,8 +64,6 @@ class RecipeFragment : Fragment() {
         binding.rvMethod.adapter = methodsAdapter
 
         viewModel.state.observe(viewLifecycleOwner) { recipeState ->
-            Log.i("!!!", "isFavorite: ${recipeState.isFavorite}")
-
             recipeState.recipe?.let { recipe ->
                 binding.tvLabelRecipe.text = recipe.title
                 binding.ivHeaderRecipe.setImageDrawable(recipeState.recipeImage)

@@ -43,6 +43,7 @@ class FavoritesFragment : Fragment() {
         viewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
             initRecycler(recipes)
         }
+        viewModel.refreshFavorites()
     }
 
     private fun initRecycler(recipes: List<Recipe>) {

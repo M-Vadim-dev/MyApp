@@ -28,7 +28,6 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     }
 
     init {
-        Log.i("!!!", "Initializing RecipeViewModel")
         _state.value = RecipeState().copy(isFavorite = true)
     }
 
@@ -37,7 +36,8 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         val recipe = STUB.getRecipeById(recipeId)
         val isFavorite = getFavorites().contains(recipeId.toString())
         val recipeImage = loadImageFromAssets(recipeId)
-        _state.value = _state.value?.copy(recipe = recipe, isFavorite = isFavorite, recipeImage = recipeImage)
+        _state.value =
+            _state.value?.copy(recipe = recipe, isFavorite = isFavorite, recipeImage = recipeImage)
     }
 
     internal fun updatePortionCount(portionsCount: Int) {
@@ -47,7 +47,6 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     private fun getFavorites(): MutableSet<String> {
         val favoriteSet: Set<String>? =
             sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, null)
-        Log.i("!!!", "Loaded favorites: $favoriteSet")
         return HashSet(favoriteSet ?: emptySet())
     }
 
