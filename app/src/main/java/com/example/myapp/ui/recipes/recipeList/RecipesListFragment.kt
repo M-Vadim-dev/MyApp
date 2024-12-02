@@ -9,12 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
-import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
-import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
-import com.example.myapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
+
 
 class RecipesListFragment : Fragment() {
 
@@ -23,12 +22,9 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipesListBinding must not be null")
 
-    private var categoryId: Int? = null
-    private var categoryName: String? = null
-    private var categoryImageUrl: String? = null
-
     private val viewModel: RecipesListViewModel by viewModels()
     private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
+    private val args: RecipesListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,18 +38,11 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireArguments().let { args ->
-            categoryId = args.getInt(ARG_CATEGORY_ID)
-            categoryName = args.getString(ARG_CATEGORY_NAME)
-            categoryImageUrl = args.getString(ARG_CATEGORY_IMAGE_URL)
-        }
-
-        binding.tvLabelRecipes.text = categoryName
-        loadImageFromAssets(categoryImageUrl)
+        binding.tvLabelRecipes.text = args.category.title
+        loadImageFromAssets(args.category.imageUrl)
         binding.ivHeaderRecipes.contentDescription =
-            getString(R.string.text_image_recipe_description, categoryName)
-
-        viewModel.loadRecipes(categoryId ?: 0)
+            getString(R.string.text_image_recipe_description, args.category.title)
+        viewModel.loadRecipes(args.category.id)
 
         binding.rvRecipes.adapter = adapter
 
