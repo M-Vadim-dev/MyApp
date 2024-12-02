@@ -82,9 +82,17 @@
     <action
         android:id="@+id/action_global_category"
         app:destination="@id/categoriesListFragment"
-        app:launchSingleTop="true" />
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     <action
         android:id="@+id/action_global_favorites"
         app:destination="@id/favoritesFragment"
-        app:launchSingleTop="true" />
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 </navigation>
