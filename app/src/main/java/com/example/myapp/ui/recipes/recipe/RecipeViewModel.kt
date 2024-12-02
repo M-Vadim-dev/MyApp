@@ -9,8 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.myapp.data.STUB
 import com.example.myapp.model.Recipe
-import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.KEY_FAVORITE_RECIPES
-import com.example.myapp.ui.recipes.recipe.RecipeFragment.Companion.PREFS_NAME
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -80,5 +78,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
 
     private companion object {
         const val PATH_TEMPLATE = "recipes/%d.png"
+        const val PREFS_NAME = "app_preferences"
+        const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }
 }
