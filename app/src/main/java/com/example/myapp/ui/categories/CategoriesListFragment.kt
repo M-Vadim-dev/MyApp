@@ -40,21 +40,14 @@ class CategoriesListFragment : Fragment() {
             categoriesAdapter.setOnItemClickListener(object :
                 CategoriesListAdapter.OnItemClickListener {
                 override fun onItemClick(category: Category) {
-                    openRecipesByCategoryId(category.id)
+                    findNavController().navigate(
+                        CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                            category
+                        )
+                    )
                 }
             })
         }
-    }
-
-    private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = viewModel.categories.value?.find { it.id == categoryId }
-            ?: throw IllegalArgumentException("Category with ID $categoryId not found")
-
-        val action =
-            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                category
-            )
-        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
