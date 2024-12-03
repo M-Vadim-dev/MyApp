@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.myapp.R
 import com.example.myapp.databinding.FragmentListCategoriesBinding
 import com.example.myapp.model.Category
 
@@ -42,32 +40,25 @@ class CategoriesListFragment : Fragment() {
             categoriesAdapter.setOnItemClickListener(object :
                 CategoriesListAdapter.OnItemClickListener {
                 override fun onItemClick(category: Category) {
-                    openRecipesByCategory(category)
+                    openRecipesByCategoryId(category.id)
                 }
             })
         }
     }
 
-    private fun openRecipesByCategory(category: Category) {
-        val bundle = bundleOf(
-            ARG_CATEGORY_ID to category.id,
-            ARG_CATEGORY_NAME to category.title,
-            ARG_CATEGORY_IMAGE_URL to category.imageUrl
-        )
-        findNavController().navigate(
-            R.id.action_categoriesListFragment_to_recipesListFragment,
-            bundle
-        )
+    private fun openRecipesByCategoryId(categoryId: Int) {
+        val category = viewModel.categories.value?.find { it.id == categoryId }
+            ?: throw IllegalArgumentException("Category with ID $categoryId not found")
+
+        val action =
+            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                category
+            )
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val ARG_CATEGORY_ID = "arg_category_id"
-        const val ARG_CATEGORY_NAME = "arg_category_name"
-        const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
     }
 }
