@@ -1,14 +1,17 @@
 package com.example.myapp.ui.recipes.recipe
 
 import android.app.Application
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.myapp.data.STUB
+import com.example.myapp.data.RecipesRepository
+import com.example.myapp.utils.ThreadPoolProvider
 import com.example.myapp.model.Recipe
+import com.example.myapp.utils.Constants
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -30,16 +33,28 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     }
 
     internal fun loadRecipe(recipeId: Int) {
-        // TODO: load from network
-        val recipe = STUB.getRecipeById(recipeId)
-        val isFavorite = getFavorites().contains(recipeId.toString())
-        val recipeImage = loadImageFromAssets(recipeId)
-        _state.value =
-            _state.value?.copy(recipe = recipe, isFavorite = isFavorite, recipeImage = recipeImage)
+        ThreadPoolProvider.getThreadPool().execute {
+            try {
+                val recipe = RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getRecipeById(recipeId)
+                val isFavorite = getFavorites().contains(recipeId.toString())
+                val imageName =
+                    RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getImageUrlById(recipeId)
+                val recipeImage = loadImageFromAssets(imageName)
+                _state.postValue(
+                    _state.value?.copy(
+                        recipe = recipe,
+                        isFavorite = isFavorite,
+                        recipeImage = recipeImage
+                    )
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "Ошибка при загрузке рецепта", e)
+            }
+        }
     }
 
     internal fun updatePortionCount(portionsCount: Int) {
-        _state.value = _state.value?.copy(portionsCount = portionsCount)
+        _state.postValue(_state.value?.copy(portionsCount = portionsCount))
     }
 
     private fun getFavorites(): MutableSet<String> {
@@ -65,19 +80,18 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
             .apply()
     }
 
-    private fun loadImageFromAssets(recipeId: Int): Drawable? {
+    private fun loadImageFromAssets(imageURL: String): Drawable? {
         return try {
-            application.assets.open(PATH_TEMPLATE.format(recipeId)).use { stream ->
+            application.assets.open(Constants.PATH_TEMPLATE.format(imageURL)).use { stream ->
                 Drawable.createFromStream(stream, null)
             }
         } catch (e: Exception) {
-            Log.e("RecipeViewModel", "Error loading image for recipe ID: $recipeId", e)
+            Log.e("RecipeViewModel", "Ошибка при загрузке изображения: $imageURL", e)
             null
         }
     }
 
     private companion object {
-        const val PATH_TEMPLATE = "recipes/%d.png"
         const val PREFS_NAME = "app_preferences"
         const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }

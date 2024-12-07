@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
-
 
 class RecipesListFragment : Fragment() {
 
@@ -47,7 +47,12 @@ class RecipesListFragment : Fragment() {
         binding.rvRecipes.adapter = adapter
 
         viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
-            adapter.updateDataSet(recipes)
+            if (recipes == null) Toast.makeText(
+                context,
+                R.string.error_retrieving_data,
+                Toast.LENGTH_SHORT
+            ).show()
+            else adapter.updateDataSet(recipes)
 
             adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipe: Recipe) {
@@ -70,7 +75,7 @@ class RecipesListFragment : Fragment() {
                     Drawable.createFromStream(stream, null)
                 }
             } catch (e: Exception) {
-                Log.e("RecipesListFragment", "Error loading image: $imageFileName", e)
+                Log.e("RecipesListFragment", "Ошибка при загрузке изображения: $imageFileName", e)
                 null
             }
             binding.ivHeaderRecipes.setImageDrawable(drawable)
@@ -84,4 +89,5 @@ class RecipesListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

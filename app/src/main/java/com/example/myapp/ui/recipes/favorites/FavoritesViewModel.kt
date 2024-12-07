@@ -1,13 +1,17 @@
 package com.example.myapp.ui.recipes.favorites
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapp.data.STUB
+import com.example.myapp.data.RecipesRepository
+import com.example.myapp.utils.ThreadPoolProvider
 import com.example.myapp.model.Recipe
 
+@Suppress("UNCHECKED_CAST")
 class FavoritesViewModel(private val context: Context) : ViewModel() {
     private val _favoriteRecipes = MutableLiveData<List<Recipe>>()
     val favoriteRecipes: LiveData<List<Recipe>> get() = _favoriteRecipes
@@ -17,8 +21,21 @@ class FavoritesViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun loadFavorites() {
-        val favoriteIds = getFavorites()
-        _favoriteRecipes.value = STUB.getRecipesByIds(favoriteIds)
+        ThreadPoolProvider.getThreadPool().execute {
+            try {
+                val favoriteIds = getFavorites()
+                val favoritesList =
+                    RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getRecipesByIds(favoriteIds)
+
+                if (favoritesList.isNullOrEmpty()) {
+                    _favoriteRecipes.postValue(emptyList())
+                } else _favoriteRecipes.postValue(favoritesList.toList())
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Ошибка при загрузке избранных рецептов", e)
+                _favoriteRecipes.postValue(emptyList())
+            }
+        }
     }
 
     fun refreshFavorites() {
