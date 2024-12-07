@@ -11,4 +11,6 @@
     <string name="text_cooking_method">Способ приготовления</string>
     <string name="text_servings_seekbar">Порции: %1$s</string>
     <string name="text_favorites">Вы еще не добавили ни одного рецепта в избранное</string>
+    <string name="error_retrieving_data">Ошибка получения данных</string>
+    <string name="error_loading_image">Ошибка загрузки изображения</string>
 </resources>
