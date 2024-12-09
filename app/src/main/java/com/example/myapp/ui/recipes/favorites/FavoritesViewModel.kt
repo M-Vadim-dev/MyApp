@@ -1,8 +1,6 @@
 package com.example.myapp.ui.recipes.favorites
 
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,26 +18,16 @@ class FavoritesViewModel(private val context: Context) : ViewModel() {
         loadFavorites()
     }
 
-    private fun loadFavorites() {
-        ThreadPoolProvider.getThreadPool().execute {
-            try {
-                val favoriteIds = getFavorites()
-                val favoritesList =
-                    RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getRecipesByIds(favoriteIds)
-
-                if (favoritesList.isNullOrEmpty()) {
-                    _favoriteRecipes.postValue(emptyList())
-                } else _favoriteRecipes.postValue(favoritesList.toList())
-
-            } catch (e: Exception) {
-                Log.e(TAG, "Ошибка при загрузке избранных рецептов", e)
-                _favoriteRecipes.postValue(emptyList())
-            }
-        }
-    }
-
     fun refreshFavorites() {
         loadFavorites()
+    }
+
+    private fun loadFavorites() {
+        ThreadPoolProvider.threadPool.execute {
+            val favoriteIds = getFavorites()
+            val favoritesList = RecipesRepository.INSTANCE.getRecipesByIds(favoriteIds)
+            _favoriteRecipes.postValue(favoritesList?.toList())
+        }
     }
 
     private fun getFavorites(): Set<Int> {
