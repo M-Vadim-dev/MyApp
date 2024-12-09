@@ -17,10 +17,10 @@
             android:layout_height="@dimen/category_image_224"
             android:contentDescription="@string/text_category_description"
             android:scaleType="centerCrop"
-            android:src="@drawable/bcg_categories"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/bcg_categories" />
 
         <TextView
             android:id="@+id/tvLabelRecipes"

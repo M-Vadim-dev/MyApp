@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
-
 
 class RecipesListFragment : Fragment() {
 
@@ -63,25 +63,26 @@ class RecipesListFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun loadImageFromAssets(imageFileName: String?) {
-        if (imageFileName != null) {
-            val drawable = try {
-                requireContext().assets.open(imageFileName).use { stream ->
-                    Drawable.createFromStream(stream, null)
-                }
-            } catch (e: Exception) {
-                Log.e("RecipesListFragment", "Error loading image: $imageFileName", e)
-                null
+    private fun loadImageFromAssets(imageFileName: String) {
+        val drawable = try {
+            requireContext().assets.open(imageFileName).use { stream ->
+                Drawable.createFromStream(stream, null)
             }
-            binding.ivHeaderRecipes.setImageDrawable(drawable)
-        } else {
-            Log.e("RecipesListFragment", "Image file name is null")
-            binding.ivHeaderRecipes.setImageDrawable(null)
+        } catch (e: Exception) {
+            Log.e("RecipesListFragment", "Ошибка при загрузке изображения: $imageFileName", e)
+            Toast.makeText(
+                context,
+                R.string.error_loading_image,
+                Toast.LENGTH_SHORT
+            ).show()
+            null
         }
+        binding.ivHeaderRecipes.setImageDrawable(drawable)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

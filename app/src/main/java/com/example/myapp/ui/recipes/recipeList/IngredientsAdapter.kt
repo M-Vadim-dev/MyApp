@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.databinding.ItemIngredientBinding
 import com.example.myapp.model.Ingredient
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 class IngredientsAdapter(private var dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
@@ -35,15 +33,18 @@ class IngredientsAdapter(private var dataSet: List<Ingredient>) :
         return IngredientViewHolder(binding)
     }
 
-    @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(viewHolder: IngredientViewHolder, position: Int) {
         val ingredient = dataSet[position]
 
-        val calculatedQuantity = BigDecimal(ingredient.quantity) * BigDecimal(quantity)
-        val quantityText = calculatedQuantity
-            .setScale(1, RoundingMode.HALF_UP)
-            .stripTrailingZeros()
-            .toPlainString()
+        val quantityText = runCatching {
+            "${ingredient.quantity.toInt() * quantity}"
+        }.getOrElse {
+            runCatching {
+                "%.1f".format(ingredient.quantity.toFloat() * quantity)
+            }.getOrElse {
+                ingredient.quantity
+            }
+        }
 
         with(viewHolder) {
             quantityTextView.text = quantityText
