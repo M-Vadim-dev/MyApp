@@ -1,6 +1,7 @@
 package com.example.myapp.ui.categories
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,25 +38,21 @@ class CategoriesListFragment : Fragment() {
         binding.rvCategories.adapter = categoriesAdapter
 
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
-            if (categories == null) Toast.makeText(
-                context,
-                R.string.error_retrieving_data,
-                Toast.LENGTH_SHORT
-            ).show()
-            else categoriesAdapter.updateDataSet(categories)
-
-            categoriesAdapter.setOnItemClickListener(object :
-                CategoriesListAdapter.OnItemClickListener {
-                override fun onItemClick(category: Category) {
-                    findNavController().navigate(
-                        CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                            category
-                        )
-
-                    )
-                }
-            })
+            categoriesAdapter.updateDataSet(categories)
         }
+
+        categoriesAdapter.setOnItemClickListener(object :
+            CategoriesListAdapter.OnItemClickListener {
+            override fun onItemClick(category: Category) {
+                findNavController().navigate(
+                    CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                        category
+                    )
+
+
+                )
+            }
+        })
     }
 
     override fun onDestroyView() {

@@ -17,10 +17,14 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     private fun loadCategories() {
-        ThreadPoolProvider.getThreadPool().execute {
-            val categories = RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getAllCategories()
-            if (categories != null) _categories.postValue(categories.toList())
-            else Log.e("CategoriesListViewModel", "Ошибка получения данных")
+        ThreadPoolProvider.threadPool.execute {
+            runCatching {
+                RecipesRepository.INSTANCE.getAllCategories()
+            }.onSuccess { categories ->
+                _categories.postValue(categories ?: emptyList())
+            }.onFailure { e ->
+                Log.e("CategoriesListViewModel", "Ошибка получения данных", e)
+            }
         }
     }
 }

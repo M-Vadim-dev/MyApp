@@ -1,7 +1,6 @@
 package com.example.myapp.ui.recipes.recipe
 
 import android.app.Application
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -33,22 +32,19 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     }
 
     internal fun loadRecipe(recipeId: Int) {
-        ThreadPoolProvider.getThreadPool().execute {
-            try {
-                val recipe = RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getRecipeById(recipeId)
+        ThreadPoolProvider.threadPool.execute {
+            val result = runCatching {
+                val recipe = RecipesRepository.INSTANCE.getRecipeById(recipeId)
                 val isFavorite = getFavorites().contains(recipeId.toString())
-                val imageName =
-                    RecipesRepository.INSTANCE_RECIPES_REPOSITORY.getImageUrlById(recipeId)
-                val recipeImage = loadImageFromAssets(imageName)
+                val recipeImage = recipe?.let { loadImageFromAssets(recipe.imageUrl) }
                 _state.postValue(
                     _state.value?.copy(
-                        recipe = recipe,
-                        isFavorite = isFavorite,
-                        recipeImage = recipeImage
+                        recipe = recipe, isFavorite = isFavorite, recipeImage = recipeImage
                     )
                 )
-            } catch (e: Exception) {
-                Log.e(TAG, "Ошибка при загрузке рецепта", e)
+            }
+            result.onFailure {
+                Log.e("RecipeViewModel", "Ошибка при загрузке рецепта")
             }
         }
     }

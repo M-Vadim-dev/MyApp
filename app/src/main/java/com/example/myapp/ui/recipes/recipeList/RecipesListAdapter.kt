@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.R
 import com.example.myapp.databinding.ItemRecipeBinding
 import com.example.myapp.model.Recipe
 import com.example.myapp.utils.Constants
-import com.google.android.material.snackbar.Snackbar
 
 class RecipesListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipesListAdapter.RecipeViewHolder>() {
@@ -49,8 +49,11 @@ class RecipesListAdapter(private var dataSet: List<Recipe>) :
                 }
         } catch (e: Exception) {
             Log.e("RecipesListAdapter", "Ошибка при загрузке изображения: ${recipe.imageUrl}", e)
-            Snackbar.make(viewHolder.itemView, R.string.error_loading_image, Snackbar.LENGTH_SHORT)
-                .show()
+            Toast.makeText(
+                viewHolder.itemView.context,
+                R.string.error_loading_image,
+                Toast.LENGTH_SHORT
+            ).show()
             null
         }
 

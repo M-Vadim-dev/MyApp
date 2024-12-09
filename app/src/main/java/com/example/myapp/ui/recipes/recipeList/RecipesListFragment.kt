@@ -47,12 +47,7 @@ class RecipesListFragment : Fragment() {
         binding.rvRecipes.adapter = adapter
 
         viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
-            if (recipes == null) Toast.makeText(
-                context,
-                R.string.error_retrieving_data,
-                Toast.LENGTH_SHORT
-            ).show()
-            else adapter.updateDataSet(recipes)
+            adapter.updateDataSet(recipes)
 
             adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipe: Recipe) {
@@ -68,21 +63,21 @@ class RecipesListFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun loadImageFromAssets(imageFileName: String?) {
-        if (imageFileName != null) {
-            val drawable = try {
-                requireContext().assets.open(imageFileName).use { stream ->
-                    Drawable.createFromStream(stream, null)
-                }
-            } catch (e: Exception) {
-                Log.e("RecipesListFragment", "Ошибка при загрузке изображения: $imageFileName", e)
-                null
+    private fun loadImageFromAssets(imageFileName: String) {
+        val drawable = try {
+            requireContext().assets.open(imageFileName).use { stream ->
+                Drawable.createFromStream(stream, null)
             }
-            binding.ivHeaderRecipes.setImageDrawable(drawable)
-        } else {
-            Log.e("RecipesListFragment", "Image file name is null")
-            binding.ivHeaderRecipes.setImageDrawable(null)
+        } catch (e: Exception) {
+            Log.e("RecipesListFragment", "Ошибка при загрузке изображения: $imageFileName", e)
+            Toast.makeText(
+                context,
+                R.string.error_loading_image,
+                Toast.LENGTH_SHORT
+            ).show()
+            null
         }
+        binding.ivHeaderRecipes.setImageDrawable(drawable)
     }
 
     override fun onDestroyView() {
