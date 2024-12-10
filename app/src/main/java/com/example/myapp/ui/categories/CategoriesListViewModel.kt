@@ -1,9 +1,11 @@
 package com.example.myapp.ui.categories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapp.data.STUB
+import com.example.myapp.data.RecipesRepository
+import com.example.myapp.utils.ThreadPoolProvider
 import com.example.myapp.model.Category
 
 class CategoriesListViewModel : ViewModel() {
@@ -15,6 +17,14 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     private fun loadCategories() {
-        _categories.value = STUB.getCategories()
+        ThreadPoolProvider.threadPool.execute {
+            runCatching {
+                RecipesRepository.INSTANCE.getAllCategories()
+            }.onSuccess { categories ->
+                _categories.postValue(categories ?: emptyList())
+            }.onFailure { e ->
+                Log.e("CategoriesListViewModel", "Ошибка получения данных", e)
+            }
+        }
     }
 }

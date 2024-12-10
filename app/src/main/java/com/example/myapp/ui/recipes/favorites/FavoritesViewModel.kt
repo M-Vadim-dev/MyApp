@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapp.data.STUB
+import com.example.myapp.data.RecipesRepository
+import com.example.myapp.utils.ThreadPoolProvider
 import com.example.myapp.model.Recipe
 
+@Suppress("UNCHECKED_CAST")
 class FavoritesViewModel(private val context: Context) : ViewModel() {
     private val _favoriteRecipes = MutableLiveData<List<Recipe>>()
     val favoriteRecipes: LiveData<List<Recipe>> get() = _favoriteRecipes
@@ -16,13 +18,16 @@ class FavoritesViewModel(private val context: Context) : ViewModel() {
         loadFavorites()
     }
 
-    private fun loadFavorites() {
-        val favoriteIds = getFavorites()
-        _favoriteRecipes.value = STUB.getRecipesByIds(favoriteIds)
-    }
-
     fun refreshFavorites() {
         loadFavorites()
+    }
+
+    private fun loadFavorites() {
+        ThreadPoolProvider.threadPool.execute {
+            val favoriteIds = getFavorites()
+            val favoritesList = RecipesRepository.INSTANCE.getRecipesByIds(favoriteIds)
+            _favoriteRecipes.postValue(favoritesList?.toList())
+        }
     }
 
     private fun getFavorites(): Set<Int> {
