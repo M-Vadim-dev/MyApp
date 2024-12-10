@@ -11,9 +11,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
+import com.example.myapp.data.ImageLoaderService
 import com.example.myapp.databinding.FragmentRecipeBinding
 import com.example.myapp.ui.recipes.recipeList.IngredientsAdapter
 import com.example.myapp.ui.recipes.recipeList.MethodAdapter
+import com.example.myapp.utils.Constants
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
@@ -51,7 +53,12 @@ class RecipeFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { recipeState ->
             recipeState.recipe?.let { recipe ->
                 binding.tvLabelRecipe.text = recipe.title
-                binding.ivHeaderRecipe.setImageDrawable(recipeState.recipeImage)
+
+                ImageLoaderService.loadImage(
+                    requireContext(),
+                    Constants.API_IMAGES_URL + recipe.imageUrl,
+                    binding.ivHeaderRecipe
+                )
 
                 ingredientsAdapter.ingredients = recipe.ingredients
                 methodsAdapter.methods = recipe.method

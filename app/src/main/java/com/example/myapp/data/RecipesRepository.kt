@@ -52,7 +52,10 @@ class RecipesRepository {
             val response = call.execute()
             if (response.isSuccessful) {
                 response.body()
-            } else null
+            } else {
+                Log.e("RecipesRepository", "Error code: ${response.code()}, message: ${response.message()}")
+                null
+            }
         } catch (e: Exception) {
             Log.e("RecipesRepository", "Не удалось подключиться к серверу", e)
             null

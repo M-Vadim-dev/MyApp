@@ -1,15 +1,15 @@
 package com.example.myapp.ui.categories
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.R
+import com.example.myapp.data.ImageLoaderService
 import com.example.myapp.databinding.ItemCategoryBinding
 import com.example.myapp.model.Category
+import com.example.myapp.utils.Constants
 
 class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
@@ -42,18 +42,12 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
         viewHolder.titleTextView.text = category.title
         viewHolder.descriptionTextView.text = category.description
 
-        val drawable = try {
-            val inputStream = viewHolder.itemView.context.assets.open(category.imageUrl)
-            Drawable.createFromStream(inputStream, null).also {
-                inputStream.close()
-            }
+        ImageLoaderService.loadImage(
+            viewHolder.itemView.context,
+            Constants.API_IMAGES_URL + category.imageUrl,
+            viewHolder.imageView
+        )
 
-        } catch (e: Exception) {
-            Log.e("CategoriesListAdapter", "Error loading image: ${category.imageUrl}")
-            null
-        }
-
-        viewHolder.imageView.setImageDrawable(drawable)
         viewHolder.imageView.contentDescription =
             viewHolder.itemView.context.getString(
                 R.string.text_image_description,
