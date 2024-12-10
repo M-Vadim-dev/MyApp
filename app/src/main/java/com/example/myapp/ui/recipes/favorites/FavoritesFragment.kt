@@ -40,26 +40,32 @@ class FavoritesFragment : Fragment() {
         binding.rvFavorites.adapter = adapter
 
         viewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
-            if (recipes == null) Toast.makeText(
-                context,
-                R.string.error_retrieving_data,
-                Toast.LENGTH_LONG
-            ).show()
-            else initRecycler(recipes)
+            when {
+                recipes == null -> {
+                    showEmptyState(true)
+                    Toast.makeText(context, R.string.error_retrieving_data, Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                recipes.isEmpty() -> showEmptyState(true)
+                else -> initRecycler(recipes)
+            }
         }
         viewModel.refreshFavorites()
     }
 
-    private fun initRecycler(recipes: List<Recipe>) {
-        adapter.updateDataSet(recipes)
-
-        if (recipes.isEmpty()) {
+    private fun showEmptyState(isEmpty: Boolean) {
+        if (isEmpty) {
             binding.tvFavorites.visibility = View.VISIBLE
             binding.rvFavorites.visibility = View.GONE
         } else {
             binding.tvFavorites.visibility = View.GONE
             binding.rvFavorites.visibility = View.VISIBLE
         }
+    }
+
+    private fun initRecycler(recipes: List<Recipe>) {
+        adapter.updateDataSet(recipes)
 
         adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
             override fun onItemClick(recipe: Recipe) {
