@@ -36,6 +36,10 @@ class RecipesRepository {
     fun getRecipeById(id: Int): Recipe? = safeApiCall(apiService.getRecipeById(id))
 
     fun getRecipesByIds(ids: Set<Int>): List<Recipe>? {
+        if (ids.isEmpty()) {
+            Log.e("RecipesRepository", "Empty ID set provided")
+            return emptyList()
+        }
         val idString = ids.joinToString(",")
         return safeApiCall(apiService.getRecipesByIds(idString))
     }
@@ -53,7 +57,16 @@ class RecipesRepository {
             if (response.isSuccessful) {
                 response.body()
             } else {
-                Log.e("RecipesRepository", "Error code: ${response.code()}, message: ${response.message()}")
+                Log.e(
+                    "RecipesRepository",
+                    "Error code: ${response.code()}, message: ${response.message()}"
+                )
+                if (response.code() == 500) {
+                    Log.e(
+                        "RecipesRepository",
+                        "Internal server error. Body: ${response.errorBody()?.string()}"
+                    )
+                }
                 null
             }
         } catch (e: Exception) {
