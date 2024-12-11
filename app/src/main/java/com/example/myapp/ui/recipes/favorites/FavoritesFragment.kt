@@ -41,11 +41,12 @@ class FavoritesFragment : Fragment() {
 
         viewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
             when {
-                recipes == null -> {
-                    showEmptyState(true)
-                    Toast.makeText(context, R.string.error_retrieving_data, Toast.LENGTH_LONG)
-                        .show()
-                }
+                recipes == null -> Toast.makeText(
+                    context,
+                    R.string.error_retrieving_data,
+                    Toast.LENGTH_LONG
+                )
+                    .show()
 
                 recipes.isEmpty() -> showEmptyState(true)
                 else -> initRecycler(recipes)

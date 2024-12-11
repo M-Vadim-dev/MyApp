@@ -14,7 +14,6 @@ data class RecipeState(
     val recipe: Recipe? = null,
     val isFavorite: Boolean = false,
     val portionsCount: Int = 1,
-    val recipeImageUrl: String? = null,
 )
 
 class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
@@ -34,13 +33,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
             val result = runCatching {
                 val recipe = RecipesRepository.INSTANCE.getRecipeById(recipeId)
                 val isFavorite = getFavorites().contains(recipeId.toString())
-                _state.postValue(
-                    _state.value?.copy(
-                        recipe = recipe,
-                        isFavorite = isFavorite,
-                        recipeImageUrl = recipe?.imageUrl
-                    )
-                )
+                _state.postValue(_state.value?.copy(recipe = recipe, isFavorite = isFavorite))
             }
             result.onFailure {
                 Log.e("RecipeViewModel", "Ошибка при загрузке рецепта")

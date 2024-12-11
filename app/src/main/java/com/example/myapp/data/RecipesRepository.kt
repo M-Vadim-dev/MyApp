@@ -36,10 +36,6 @@ class RecipesRepository {
     fun getRecipeById(id: Int): Recipe? = safeApiCall(apiService.getRecipeById(id))
 
     fun getRecipesByIds(ids: Set<Int>): List<Recipe>? {
-        if (ids.isEmpty()) {
-            Log.e("RecipesRepository", "Empty ID set provided")
-            return emptyList()
-        }
         val idString = ids.joinToString(",")
         return safeApiCall(apiService.getRecipesByIds(idString))
     }
