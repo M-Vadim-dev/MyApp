@@ -1,5 +1,5 @@
 package com.example.myapp.utils
 
 object Constants {
-    const val PATH_TEMPLATE = "recipes/%s"
+    const val API_IMAGES_URL = "https://recipes.androidsprint.ru/api/images/"
 }

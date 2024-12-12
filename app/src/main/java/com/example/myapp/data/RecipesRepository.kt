@@ -52,7 +52,19 @@ class RecipesRepository {
             val response = call.execute()
             if (response.isSuccessful) {
                 response.body()
-            } else null
+            } else {
+                Log.e(
+                    "RecipesRepository",
+                    "Error code: ${response.code()}, message: ${response.message()}"
+                )
+                if (response.code() == 500) {
+                    Log.e(
+                        "RecipesRepository",
+                        "Internal server error. Body: ${response.errorBody()?.string()}"
+                    )
+                }
+                null
+            }
         } catch (e: Exception) {
             Log.e("RecipesRepository", "Не удалось подключиться к серверу", e)
             null

@@ -1,19 +1,18 @@
 package com.example.myapp.ui.recipes.recipeList
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.myapp.R
+import com.example.myapp.data.ImageLoaderService
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
+import com.example.myapp.utils.Constants
 
 class RecipesListFragment : Fragment() {
 
@@ -39,7 +38,13 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvLabelRecipes.text = args.category.title
-        loadImageFromAssets(args.category.imageUrl)
+
+        ImageLoaderService.loadImage(
+            requireContext(),
+            Constants.API_IMAGES_URL + args.category.imageUrl,
+            binding.ivHeaderRecipes
+        )
+
         binding.ivHeaderRecipes.contentDescription =
             getString(R.string.text_image_recipe_description, args.category.title)
         viewModel.loadRecipes(args.category.id)
@@ -63,26 +68,8 @@ class RecipesListFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun loadImageFromAssets(imageFileName: String) {
-        val drawable = try {
-            requireContext().assets.open(imageFileName).use { stream ->
-                Drawable.createFromStream(stream, null)
-            }
-        } catch (e: Exception) {
-            Log.e("RecipesListFragment", "Ошибка при загрузке изображения: $imageFileName", e)
-            Toast.makeText(
-                context,
-                R.string.error_loading_image,
-                Toast.LENGTH_SHORT
-            ).show()
-            null
-        }
-        binding.ivHeaderRecipes.setImageDrawable(drawable)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }
