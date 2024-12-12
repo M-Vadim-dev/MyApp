@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
-import com.example.myapp.utils.ThreadPoolProvider
 import com.example.myapp.model.Recipe
+import kotlinx.coroutines.launch
 
 @Suppress("UNCHECKED_CAST")
 class FavoritesViewModel(private val context: Context) : ViewModel() {
@@ -23,8 +24,12 @@ class FavoritesViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun loadFavorites() {
-        ThreadPoolProvider.threadPool.execute {
+        viewModelScope.launch {
             val favoriteIds = getFavorites()
+            if (favoriteIds.isEmpty()) {
+                _favoriteRecipes.postValue(emptyList())
+                return@launch
+            }
             val favoritesList = RecipesRepository.INSTANCE.getRecipesByIds(favoriteIds)
             _favoriteRecipes.postValue(favoritesList?.toList())
         }

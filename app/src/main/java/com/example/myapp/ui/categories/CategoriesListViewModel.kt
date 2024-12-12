@@ -4,9 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
-import com.example.myapp.utils.ThreadPoolProvider
 import com.example.myapp.model.Category
+import kotlinx.coroutines.launch
 
 class CategoriesListViewModel : ViewModel() {
     private val _categories = MutableLiveData<List<Category>>()
@@ -17,7 +18,7 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     private fun loadCategories() {
-        ThreadPoolProvider.threadPool.execute {
+        viewModelScope.launch {
             runCatching {
                 RecipesRepository.INSTANCE.getAllCategories()
             }.onSuccess { categories ->
