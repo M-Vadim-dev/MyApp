@@ -6,9 +6,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
-import com.example.myapp.utils.ThreadPoolProvider
+import kotlinx.coroutines.launch
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -29,7 +30,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     }
 
     internal fun loadRecipe(recipeId: Int) {
-        ThreadPoolProvider.threadPool.execute {
+        viewModelScope.launch {
             val result = runCatching {
                 val recipe = RecipesRepository.INSTANCE.getRecipeById(recipeId)
                 val isFavorite = getFavorites().contains(recipeId.toString())
