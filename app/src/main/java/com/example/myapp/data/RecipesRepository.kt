@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.myapp.model.Category
 import com.example.myapp.model.Recipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -16,7 +17,7 @@ import retrofit2.Retrofit
 private const val API_BASE_URL = "https://recipes.androidsprint.ru/api/"
 private const val CONTENT_TYPE = "application/json"
 
-class RecipesRepository {
+class RecipesRepository(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
 
     private val client: OkHttpClient by lazy {
         val logging = HttpLoggingInterceptor().apply {
@@ -35,25 +36,25 @@ class RecipesRepository {
 
     private val apiService = retrofit.create(RecipeApiService::class.java)
 
-    suspend fun getRecipeById(id: Int): Recipe? = withContext(Dispatchers.IO) {
+    suspend fun getRecipeById(id: Int): Recipe? = withContext(ioDispatcher) {
         safeApiCall(apiService.getRecipeById(id))
     }
 
-    suspend fun getRecipesByIds(ids: Set<Int>): List<Recipe>? = withContext(Dispatchers.IO) {
+    suspend fun getRecipesByIds(ids: Set<Int>): List<Recipe>? = withContext(ioDispatcher) {
         val idString = ids.joinToString(",")
         safeApiCall(apiService.getRecipesByIds(idString))
     }
 
-    suspend fun getCategoryById(id: Int): Category? = withContext(Dispatchers.IO) {
+    suspend fun getCategoryById(id: Int): Category? = withContext(ioDispatcher) {
         safeApiCall(apiService.getCategoryById(id))
     }
 
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             safeApiCall(apiService.getRecipesByCategoryId(categoryId))
         }
 
-    suspend fun getAllCategories(): List<Category>? = withContext(Dispatchers.IO) {
+    suspend fun getAllCategories(): List<Category>? = withContext(ioDispatcher) {
         safeApiCall(apiService.getCategories())
     }
 
