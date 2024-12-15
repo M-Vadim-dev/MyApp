@@ -10,9 +10,14 @@ import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Category
 import kotlinx.coroutines.launch
 
+data class CategoriesListState(
+    val dataSet: List<Category>? = emptyList(),
+    val errorMessage: String? = null,
+)
+
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
-    private val _categories = MutableLiveData<List<Category>>()
-    val categories: LiveData<List<Category>> get() = _categories
+    private val _categories = MutableLiveData(CategoriesListState())
+    val categories: LiveData<CategoriesListState> get() = _categories
 
     private val recipesRepository = RecipesRepository.getInstance(application)
 
@@ -22,20 +27,21 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     private fun loadCategories() {
         viewModelScope.launch {
-            val cachedCategories = recipesRepository.getCategoriesFromCache()
-            if (cachedCategories.isNotEmpty()) _categories.postValue(cachedCategories)
+            val result = runCatching {
+                val cachedCategories = recipesRepository.getCategoriesFromCache()
+                if (cachedCategories.isNotEmpty()) return@runCatching cachedCategories
 
-            val remoteCategories = runCatching {
                 recipesRepository.getAllCategories()
+                    ?.onEach { category ->
+                        recipesRepository.insertCategoriesFromCache(category)
+                    } ?: throw Exception("Ошибка получения данных")
+            }
+            result.onSuccess { categories ->
+                _categories.value = CategoriesListState(dataSet = categories)
             }.onFailure { e ->
                 Log.e("CategoriesListViewModel", "Ошибка получения данных", e)
-            }.getOrNull()
-
-            remoteCategories?.let {
-                it.forEach { category ->
-                    recipesRepository.insertCategoriesFromCache(category)
-                }
-                _categories.postValue(it)
+                _categories.value =
+                    CategoriesListState(errorMessage = "Ошибка получения данных")
             }
         }
     }
