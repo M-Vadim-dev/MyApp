@@ -17,7 +17,11 @@ class CategoriesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentListCategoriesBinding must not be null")
 
-    private val viewModel: CategoriesListViewModel by viewModels()
+    private val viewModel: CategoriesListViewModel by viewModels {
+        CategoriesListViewModelFactory(
+            requireActivity().application
+        )
+    }
     private val categoriesAdapter: CategoriesListAdapter by lazy { CategoriesListAdapter(emptyList()) }
 
     override fun onCreateView(

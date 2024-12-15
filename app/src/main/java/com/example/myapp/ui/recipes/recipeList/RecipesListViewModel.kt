@@ -1,27 +1,42 @@
 package com.example.myapp.ui.recipes.recipeList
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipesListViewModel : ViewModel() {
+class RecipesListViewModel(application: Application) : ViewModel() {
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> get() = _recipes
+
+    private val recipesRepository = RecipesRepository.getInstance(application)
 
     internal fun loadRecipes(categoryId: Int) {
         viewModelScope.launch {
             runCatching {
-                RecipesRepository.INSTANCE.getRecipesByCategoryId(categoryId)
+                recipesRepository.getRecipesByCategoryId(categoryId)
             }.onSuccess { recipeList ->
                 _recipes.postValue(recipeList ?: emptyList())
             }.onFailure {
                 Log.e("RecipesListViewModel", "Ошибка при загрузке рецептов")
             }
         }
+    }
+}
+
+class RecipesListViewModelFactory(private val application: Application) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(RecipesListViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return RecipesListViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

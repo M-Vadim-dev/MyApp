@@ -1,5 +1,6 @@
 package com.example.myapp.data
 
+import android.content.Context
 import android.util.Log
 import com.example.myapp.model.Category
 import com.example.myapp.model.Recipe
@@ -17,8 +18,10 @@ import retrofit2.Retrofit
 private const val API_BASE_URL = "https://recipes.androidsprint.ru/api/"
 private const val CONTENT_TYPE = "application/json"
 
-class RecipesRepository(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
-
+class RecipesRepository(
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    context: Context
+) {
     private val client: OkHttpClient by lazy {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -35,6 +38,17 @@ class RecipesRepository(private val ioDispatcher: CoroutineDispatcher = Dispatch
         .build()
 
     private val apiService = retrofit.create(RecipeApiService::class.java)
+
+    private val database: AppDatabase = AppDatabase.getDatabase(context)
+    private val categoriesDao: CategoriesDao = database.categoriesDao()
+
+    suspend fun getCategoriesFromCache(): List<Category> = withContext(ioDispatcher) {
+        categoriesDao.getAllCategories()
+    }
+
+    suspend fun insertCategoriesFromCache(category: Category) = withContext(ioDispatcher) {
+        categoriesDao.insertCategory(category)
+    }
 
     suspend fun getRecipeById(id: Int): Recipe? = withContext(ioDispatcher) {
         safeApiCall(apiService.getRecipeById(id))
@@ -55,7 +69,14 @@ class RecipesRepository(private val ioDispatcher: CoroutineDispatcher = Dispatch
         }
 
     suspend fun getAllCategories(): List<Category>? = withContext(ioDispatcher) {
-        safeApiCall(apiService.getCategories())
+        val localCategories = categoriesDao.getAllCategories()
+        if (localCategories.isNotEmpty()) return@withContext localCategories
+
+        val remoteCategories = safeApiCall(apiService.getCategories())
+        remoteCategories?.forEach { category ->
+            categoriesDao.insertCategory(category)
+        }
+        return@withContext remoteCategories
     }
 
     private fun <T> safeApiCall(call: Call<T>): T? {
@@ -77,6 +98,16 @@ class RecipesRepository(private val ioDispatcher: CoroutineDispatcher = Dispatch
     }
 
     companion object {
-        val INSTANCE: RecipesRepository by lazy { RecipesRepository() }
+        @Volatile
+        private var INSTANCE: RecipesRepository? = null
+
+        fun getInstance(
+            context: Context,
+            ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+        ): RecipesRepository {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: RecipesRepository(ioDispatcher, context).also { INSTANCE = it }
+            }
+        }
     }
 }

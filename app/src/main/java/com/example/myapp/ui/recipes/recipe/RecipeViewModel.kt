@@ -32,7 +32,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     internal fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
             val result = runCatching {
-                val recipe = RecipesRepository.INSTANCE.getRecipeById(recipeId)
+                val recipe = RecipesRepository.getInstance(getApplication()).getRecipeById(recipeId)
                 val isFavorite = getFavorites().contains(recipeId.toString())
                 _state.postValue(_state.value?.copy(recipe = recipe, isFavorite = isFavorite))
             }

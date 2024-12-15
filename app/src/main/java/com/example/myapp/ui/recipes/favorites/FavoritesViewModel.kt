@@ -30,7 +30,7 @@ class FavoritesViewModel(private val context: Context) : ViewModel() {
                 _favoriteRecipes.postValue(emptyList())
                 return@launch
             }
-            val favoritesList = RecipesRepository.INSTANCE.getRecipesByIds(favoriteIds)
+            val favoritesList = RecipesRepository.getInstance(context).getRecipesByIds(favoriteIds)
             _favoriteRecipes.postValue(favoritesList?.toList())
         }
     }
