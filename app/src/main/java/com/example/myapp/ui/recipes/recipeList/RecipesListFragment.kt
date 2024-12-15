@@ -21,9 +21,7 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipesListBinding must not be null")
 
-    private val viewModel: RecipesListViewModel by viewModels {
-        RecipesListViewModelFactory(requireActivity().application)
-    }
+    private val viewModel: RecipesListViewModel by viewModels()
     private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
     private val args: RecipesListFragmentArgs by navArgs()
 

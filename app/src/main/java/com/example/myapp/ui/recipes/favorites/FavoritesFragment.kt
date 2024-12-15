@@ -20,9 +20,7 @@ class FavoritesFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentFavoritesBinding must not be null")
 
-    private val viewModel: FavoritesViewModel by viewModels {
-        FavoritesViewModel.FavoritesViewModelFactory(requireContext())
-    }
+    private val viewModel: FavoritesViewModel by viewModels()
     private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
 
     override fun onCreateView(

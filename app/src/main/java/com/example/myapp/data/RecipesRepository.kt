@@ -69,14 +69,7 @@ class RecipesRepository(
         }
 
     suspend fun getAllCategories(): List<Category>? = withContext(ioDispatcher) {
-        val localCategories = categoriesDao.getAllCategories()
-        if (localCategories.isNotEmpty()) return@withContext localCategories
-
-        val remoteCategories = safeApiCall(apiService.getCategories())
-        remoteCategories?.forEach { category ->
-            categoriesDao.insertCategory(category)
-        }
-        return@withContext remoteCategories
+        safeApiCall(apiService.getCategories())
     }
 
     private fun <T> safeApiCall(call: Call<T>): T? {
