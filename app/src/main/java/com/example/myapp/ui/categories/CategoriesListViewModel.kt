@@ -8,11 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Category
+import com.example.myapp.utils.ErrorType
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 data class CategoriesListState(
     val dataSet: List<Category>? = emptyList(),
-    val errorMessage: String? = null,
+    val errorMessage: ErrorType? = null,
 )
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
@@ -37,11 +39,15 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     } ?: throw Exception("Ошибка получения данных")
             }
             result.onSuccess { categories ->
-                _categories.value = CategoriesListState(dataSet = categories)
-            }.onFailure { e ->
-                Log.e("CategoriesListViewModel", "Ошибка получения данных", e)
-                _categories.value =
-                    CategoriesListState(errorMessage = "Ошибка получения данных")
+                _categories.value = CategoriesListState(dataSet = categories, errorMessage = null)
+            }.onFailure { error ->
+                Log.e("CategoriesListViewModel", "Ошибка получения данных", error)
+
+                val errorType = when (error) {
+                    is IOException -> ErrorType.NETWORK_ERROR
+                    else -> ErrorType.DATA_ERROR
+                }
+                _categories.value = CategoriesListState(errorMessage = errorType)
             }
         }
     }

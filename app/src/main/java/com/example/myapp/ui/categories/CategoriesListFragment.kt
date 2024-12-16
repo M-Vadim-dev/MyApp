@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.myapp.R
 import com.example.myapp.databinding.FragmentListCategoriesBinding
 import com.example.myapp.model.Category
 
@@ -37,8 +36,8 @@ class CategoriesListFragment : Fragment() {
         binding.rvCategories.adapter = categoriesAdapter
 
         viewModel.categories.observe(viewLifecycleOwner) { state ->
-            state.errorMessage?.let {
-                Toast.makeText(requireContext(), R.string.error_retrieving_data, Toast.LENGTH_LONG)
+            state.errorMessage?.let { errorType ->
+                Toast.makeText(requireContext(), getString(errorType.messageId), Toast.LENGTH_LONG)
                     .show()
             }
             state.dataSet?.let { categories -> categoriesAdapter.updateDataSet(categories) }
