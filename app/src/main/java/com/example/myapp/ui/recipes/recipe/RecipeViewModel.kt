@@ -9,12 +9,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
+import com.example.myapp.utils.ErrorType
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 data class RecipeState(
     val recipe: Recipe? = null,
     val isFavorite: Boolean = false,
     val portionsCount: Int = 1,
+    val errorType: ErrorType? = null,
 )
 
 class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
@@ -32,12 +35,25 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     internal fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
             val result = runCatching {
-                val recipe = RecipesRepository.INSTANCE.getRecipeById(recipeId)
-                val isFavorite = getFavorites().contains(recipeId.toString())
-                _state.postValue(_state.value?.copy(recipe = recipe, isFavorite = isFavorite))
+                RecipesRepository.getInstance(getApplication()).getRecipeById(recipeId)
             }
-            result.onFailure {
-                Log.e("RecipeViewModel", "Ошибка при загрузке рецепта")
+            result.onSuccess { recipe ->
+                val isFavorite = getFavorites().contains(recipeId.toString())
+                _state.postValue(
+                    _state.value?.copy(
+                        recipe = recipe,
+                        isFavorite = isFavorite,
+                        errorType = null,
+                    )
+                )
+            }.onFailure { error ->
+                Log.e("RecipeViewModel", "Ошибка при загрузке рецепта", error)
+
+                val errorType = when (error) {
+                    is IOException -> ErrorType.NETWORK_ERROR
+                    else -> ErrorType.DATA_ERROR
+                }
+                _state.postValue(_state.value?.copy(errorType = errorType))
             }
         }
     }
