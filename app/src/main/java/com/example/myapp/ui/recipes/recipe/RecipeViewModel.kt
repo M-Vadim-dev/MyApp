@@ -28,6 +28,8 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
+    private val recipesRepository = RecipesRepository.getInstance(getApplication())
+
     init {
         _state.value = RecipeState().copy(isFavorite = true)
     }
@@ -35,7 +37,13 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     internal fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
             val result = runCatching {
-                RecipesRepository.getInstance(getApplication()).getRecipeById(recipeId)
+                val cachedRecipe = recipesRepository.getRecipeFromCacheByRecipeId(recipeId)
+                if (cachedRecipe != null) return@runCatching cachedRecipe
+
+                val remoteRecipe = recipesRepository.getRecipeById(recipeId)
+                    ?.also { recipesRepository.insertRecipeIntoCache(it) }
+                    ?: throw Exception("Ошибка получения данных")
+                return@runCatching remoteRecipe
             }
             result.onSuccess { recipe ->
                 val isFavorite = getFavorites().contains(recipeId.toString())
@@ -46,7 +54,8 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
                         errorType = null,
                     )
                 )
-            }.onFailure { error ->
+            }
+            result.onFailure { error ->
                 Log.e("RecipeViewModel", "Ошибка при загрузке рецепта", error)
 
                 val errorType = when (error) {

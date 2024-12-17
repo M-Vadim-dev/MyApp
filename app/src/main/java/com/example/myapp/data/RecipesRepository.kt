@@ -41,6 +41,7 @@ class RecipesRepository(
 
     private val database: AppDatabase = AppDatabase.getDatabase(context)
     private val categoriesDao: CategoriesDao = database.categoriesDao()
+    private val recipesDao: RecipesDao = database.recipesDao()
 
     suspend fun getCategoriesFromCache(): List<Category> = withContext(ioDispatcher) {
         categoriesDao.getAllCategories()
@@ -50,6 +51,19 @@ class RecipesRepository(
         categoriesDao.insertCategory(category)
     }
 
+    suspend fun getRecipesFromCacheByCategoryId(categoryId: Int): List<Recipe> =
+        withContext(ioDispatcher) {
+            recipesDao.getRecipesByCategoryId(categoryId)
+        }
+
+    suspend fun getRecipeFromCacheByRecipeId(recipeId: Int): Recipe? = withContext(ioDispatcher) {
+        recipesDao.getRecipeById(recipeId)
+    }
+
+    suspend fun insertRecipeIntoCache(recipe: Recipe) = withContext(ioDispatcher) {
+        recipesDao.insertRecipe(recipe)
+    }
+
     suspend fun getRecipeById(id: Int): Recipe? = withContext(ioDispatcher) {
         safeApiCall(apiService.getRecipeById(id))
     }
@@ -57,10 +71,6 @@ class RecipesRepository(
     suspend fun getRecipesByIds(ids: Set<Int>): List<Recipe>? = withContext(ioDispatcher) {
         val idString = ids.joinToString(",")
         safeApiCall(apiService.getRecipesByIds(idString))
-    }
-
-    suspend fun getCategoryById(id: Int): Category? = withContext(ioDispatcher) {
-        safeApiCall(apiService.getCategoryById(id))
     }
 
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? =
