@@ -70,8 +70,8 @@
         android:label="RecipeFragment"
         tools:layout="@layout/fragment_recipe">
         <argument
-            android:name="recipeId"
-            app:argType="integer" />
+            android:name="recipe"
+            app:argType="com.example.myapp.model.Recipe" />
         <action
             android:id="@+id/action_args_recipeFragment_to_recipesListFragment"
             app:destination="@id/recipesListFragment" />

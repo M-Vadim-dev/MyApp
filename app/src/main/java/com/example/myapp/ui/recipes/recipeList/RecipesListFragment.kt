@@ -57,22 +57,21 @@ class RecipesListFragment : Fragment() {
 
             adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipe: Recipe) {
-                    navigateToRecipe(recipe.id)
+                    findNavController().navigate(
+                        RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
+                            recipe
+                        )
+                    )
                 }
             })
         }
 
         viewModel.errorType.observe(viewLifecycleOwner) { errorType ->
             errorType?.let { type ->
-                Toast.makeText(requireContext(), getString(type.messageId), Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(type.messageId), Toast.LENGTH_LONG)
+                    .show()
             }
         }
-    }
-
-    private fun navigateToRecipe(recipeId: Int) {
-        val action =
-            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(recipeId)
-        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

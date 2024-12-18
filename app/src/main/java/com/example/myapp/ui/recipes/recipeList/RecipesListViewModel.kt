@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.myapp.data.AppDatabase
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
 import com.example.myapp.utils.ErrorType
@@ -23,12 +24,21 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     internal fun loadRecipes(categoryId: Int) {
         viewModelScope.launch {
-            runCatching {
-                recipesRepository.getRecipesByCategoryId(categoryId)
-            }.onSuccess { recipeList ->
-                _recipes.postValue(recipeList ?: emptyList())
+            val result = runCatching {
+                val cachedRecipes = recipesRepository.getRecipesFromCacheByCategoryId(categoryId)
+                if (cachedRecipes.isNotEmpty()) return@runCatching cachedRecipes
+
+                val remoteRecipes = recipesRepository.getRecipesByCategoryId(categoryId)
+                    ?.onEach { recipe ->
+                        recipesRepository.insertRecipeIntoCache(recipe.copy(categoryId = categoryId))
+                    } ?: throw Exception("Ошибка получения данных")
+                return@runCatching remoteRecipes
+            }
+            result.onSuccess { recipeList ->
+                _recipes.postValue(recipeList)
                 _errorType.postValue(null)
-            }.onFailure {
+            }
+            result.onFailure {
                 Log.e("RecipesListViewModel", "Ошибка при загрузке рецептов", it)
 
                 val errorType = when (it) {
