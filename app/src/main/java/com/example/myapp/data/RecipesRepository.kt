@@ -56,16 +56,8 @@ class RecipesRepository(
             recipesDao.getRecipesByCategoryId(categoryId)
         }
 
-    suspend fun getRecipeFromCacheByRecipeId(recipeId: Int): Recipe? = withContext(ioDispatcher) {
-        recipesDao.getRecipeById(recipeId)
-    }
-
     suspend fun insertRecipeIntoCache(recipe: Recipe) = withContext(ioDispatcher) {
         recipesDao.insertRecipe(recipe)
-    }
-
-    suspend fun getRecipeById(id: Int): Recipe? = withContext(ioDispatcher) {
-        safeApiCall(apiService.getRecipeById(id))
     }
 
     suspend fun getRecipesByIds(ids: Set<Int>): List<Recipe>? = withContext(ioDispatcher) {

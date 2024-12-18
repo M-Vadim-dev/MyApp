@@ -44,7 +44,7 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initUI()
-        viewModel.loadRecipe(args.recipeId)
+        viewModel.setRecipe(args.recipe)
     }
 
     private fun initUI() {

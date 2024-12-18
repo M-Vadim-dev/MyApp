@@ -2,16 +2,11 @@ package com.example.myapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
 import com.example.myapp.utils.ErrorType
-import kotlinx.coroutines.launch
-import java.io.IOException
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -28,43 +23,9 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    private val recipesRepository = RecipesRepository.getInstance(getApplication())
-
-    init {
-        _state.value = RecipeState().copy(isFavorite = true)
-    }
-
-    internal fun loadRecipe(recipeId: Int) {
-        viewModelScope.launch {
-            val result = runCatching {
-                val cachedRecipe = recipesRepository.getRecipeFromCacheByRecipeId(recipeId)
-                if (cachedRecipe != null) return@runCatching cachedRecipe
-
-                val remoteRecipe = recipesRepository.getRecipeById(recipeId)
-                    ?.also { recipesRepository.insertRecipeIntoCache(it) }
-                    ?: throw Exception("Ошибка получения данных")
-                return@runCatching remoteRecipe
-            }
-            result.onSuccess { recipe ->
-                val isFavorite = getFavorites().contains(recipeId.toString())
-                _state.postValue(
-                    _state.value?.copy(
-                        recipe = recipe,
-                        isFavorite = isFavorite,
-                        errorType = null,
-                    )
-                )
-            }
-            result.onFailure { error ->
-                Log.e("RecipeViewModel", "Ошибка при загрузке рецепта", error)
-
-                val errorType = when (error) {
-                    is IOException -> ErrorType.NETWORK_ERROR
-                    else -> ErrorType.DATA_ERROR
-                }
-                _state.postValue(_state.value?.copy(errorType = errorType))
-            }
-        }
+    internal fun setRecipe(recipe: Recipe) {
+        val isFavorite = getFavorites().contains(recipe.id.toString())
+        _state.value = RecipeState(recipe = recipe, isFavorite = isFavorite)
     }
 
     internal fun updatePortionCount(portionsCount: Int) {
