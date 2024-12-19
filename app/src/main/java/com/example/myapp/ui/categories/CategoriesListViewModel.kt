@@ -30,13 +30,13 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     private fun loadCategories() {
         viewModelScope.launch {
             val result = runCatching {
-                val cachedCategories = recipesRepository.getCategoriesFromCache()
-                if (cachedCategories.isNotEmpty()) return@runCatching cachedCategories
+                    val cachedCategories = recipesRepository.getCategoriesFromCache()
+                    if (cachedCategories.isNotEmpty()) return@runCatching cachedCategories
 
-                recipesRepository.getAllCategories()
-                    ?.onEach { category ->
-                        recipesRepository.insertCategoriesFromCache(category)
-                    } ?: throw Exception("Ошибка получения данных")
+                    recipesRepository.getAllCategories()
+                        ?.onEach { category ->
+                            recipesRepository.insertCategoriesFromCache(category)
+                        } ?: throw Exception("Ошибка получения данных")
             }
             result.onSuccess { categories ->
                 _categories.value = CategoriesListState(dataSet = categories, errorMessage = null)

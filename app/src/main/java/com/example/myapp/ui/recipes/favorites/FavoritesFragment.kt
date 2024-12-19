@@ -68,14 +68,13 @@ class FavoritesFragment : Fragment() {
 
         adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
             override fun onItemClick(recipe: Recipe) {
-                navigateToRecipe(recipe.id)
+                findNavController().navigate(
+                    FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(
+                        recipe
+                    )
+                )
             }
         })
-    }
-
-    private fun navigateToRecipe(recipeId: Int) {
-        val action = FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(recipeId)
-        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
