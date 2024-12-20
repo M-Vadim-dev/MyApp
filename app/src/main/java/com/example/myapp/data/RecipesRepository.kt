@@ -74,6 +74,22 @@ class RecipesRepository(
         safeApiCall(apiService.getCategories())
     }
 
+    suspend fun addRecipeToFavorites(recipeId: Int) = withContext(ioDispatcher) {
+        recipesDao.addRecipeToFavorites(recipeId)
+    }
+
+    suspend fun removeRecipeFromFavorites(recipeId: Int) = withContext(ioDispatcher) {
+        recipesDao.removeRecipeFromFavorites(recipeId)
+    }
+
+    suspend fun getAllFavoriteRecipes(): List<Recipe> = withContext(ioDispatcher) {
+        recipesDao.getFavoriteRecipes()
+    }
+
+    suspend fun isRecipeFavorite(recipeId: Int): Boolean = withContext(ioDispatcher) {
+        recipesDao.getRecipeById(recipeId)?.isFavorite ?: false
+    }
+
     private fun <T> safeApiCall(call: Call<T>): T? {
         return try {
             val response = call.execute()

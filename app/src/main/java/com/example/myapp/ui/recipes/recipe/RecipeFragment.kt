@@ -77,7 +77,7 @@ class RecipeFragment : Fragment() {
                         recipeState.recipe.title
                     )
                 binding.btnHeartFavourites.setOnClickListener {
-                    viewModel.onFavoritesClicked(recipeState.recipe.id.toString())
+                    viewModel.onFavoritesClicked(recipeState.recipe)
                 }
 
                 binding.tvSeekBarServings.text =

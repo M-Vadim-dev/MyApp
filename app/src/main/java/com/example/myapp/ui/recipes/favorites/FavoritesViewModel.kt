@@ -1,7 +1,6 @@
 package com.example.myapp.ui.recipes.favorites
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,25 +23,8 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     private fun loadFavorites() {
         viewModelScope.launch {
-            val favoriteIds = getFavorites()
-            if (favoriteIds.isEmpty()) {
-                _favoriteRecipes.postValue(emptyList())
-                return@launch
-            }
-            val favoritesList = RecipesRepository.getInstance(getApplication()).getRecipesByIds(favoriteIds)
-            _favoriteRecipes.postValue(favoritesList?.toList())
+            val favoritesList = RecipesRepository.getInstance(getApplication()).getAllFavoriteRecipes()
+            _favoriteRecipes.postValue(favoritesList)
         }
-    }
-
-    private fun getFavorites(): Set<Int> {
-        val sharedPrefs =
-            getApplication<Application>().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val favoriteSet: Set<String>? = sharedPrefs.getStringSet(KEY_FAVORITE_RECIPES, null)
-        return favoriteSet?.mapNotNull { it.toIntOrNull() }?.toSet() ?: emptySet()
-    }
-
-    companion object {
-        const val PREFS_NAME = "app_preferences"
-        const val KEY_FAVORITE_RECIPES = "favorite_recipes"
     }
 }
