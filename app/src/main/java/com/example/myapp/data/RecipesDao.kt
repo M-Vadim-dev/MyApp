@@ -22,4 +22,13 @@ interface RecipesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertRecipes(recipes: List<Recipe>)
+
+    @Query("SELECT * FROM recipes WHERE is_favorite = 1")
+    fun getFavoriteRecipes(): List<Recipe>
+
+    @Query("UPDATE recipes SET is_favorite = 1 WHERE id = :recipeId")
+    fun addRecipeToFavorites(recipeId: Int)
+
+    @Query("UPDATE recipes SET is_favorite = 0 WHERE id = :recipeId")
+    fun removeRecipeFromFavorites(recipeId: Int)
 }

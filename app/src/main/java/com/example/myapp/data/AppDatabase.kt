@@ -10,7 +10,7 @@ import com.example.myapp.model.Recipe
 import com.example.myapp.utils.Constants
 import com.example.myapp.utils.Converters
 
-@Database(entities = [Category::class, Recipe::class], version = 2)
+@Database(entities = [Category::class, Recipe::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
