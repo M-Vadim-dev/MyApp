@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.myapp.R
+import com.example.myapp.RecipeApplication
 import com.example.myapp.data.ImageLoaderService
 import com.example.myapp.databinding.FragmentRecipesListBinding
 import com.example.myapp.model.Recipe
@@ -22,9 +22,16 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipesListBinding must not be null")
 
-    private val viewModel: RecipesListViewModel by viewModels()
+    private lateinit var recipesListViewModel: RecipesListViewModel
     private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
     private val args: RecipesListFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipeApplication).appContainer
+        recipesListViewModel = appContainer.recipesListViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,11 +55,11 @@ class RecipesListFragment : Fragment() {
 
         binding.ivHeaderRecipes.contentDescription =
             getString(R.string.text_image_recipe_description, args.category.title)
-        viewModel.loadRecipes(args.category.id)
+        recipesListViewModel.loadRecipes(args.category.id)
 
         binding.rvRecipes.adapter = adapter
 
-        viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
+        recipesListViewModel.recipes.observe(viewLifecycleOwner) { recipes ->
             adapter.updateDataSet(recipes)
 
             adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
@@ -66,7 +73,7 @@ class RecipesListFragment : Fragment() {
             })
         }
 
-        viewModel.errorType.observe(viewLifecycleOwner) { errorType ->
+        recipesListViewModel.errorType.observe(viewLifecycleOwner) { errorType ->
             errorType?.let { type ->
                 Toast.makeText(requireContext(), getString(type.messageId), Toast.LENGTH_LONG)
                     .show()

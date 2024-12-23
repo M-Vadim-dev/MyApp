@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.myapp.R
+import com.example.myapp.RecipeApplication
 import com.example.myapp.databinding.FragmentFavoritesBinding
 import com.example.myapp.model.Recipe
 import com.example.myapp.ui.recipes.recipeList.RecipesListAdapter
@@ -20,8 +20,15 @@ class FavoritesFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentFavoritesBinding must not be null")
 
-    private val viewModel: FavoritesViewModel by viewModels()
+    private lateinit var favoritesViewModel: FavoritesViewModel
     private val adapter: RecipesListAdapter by lazy { RecipesListAdapter(emptyList()) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipeApplication).appContainer
+        favoritesViewModel = appContainer.favoritesViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +44,7 @@ class FavoritesFragment : Fragment() {
 
         binding.rvFavorites.adapter = adapter
 
-        viewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
+        favoritesViewModel.favoriteRecipes.observe(viewLifecycleOwner) { recipes ->
             when {
                 recipes == null -> Toast.makeText(
                     context,
@@ -50,7 +57,7 @@ class FavoritesFragment : Fragment() {
                 else -> initRecycler(recipes)
             }
         }
-        viewModel.refreshFavorites()
+        favoritesViewModel.refreshFavorites()
     }
 
     private fun showEmptyState(isEmpty: Boolean) {

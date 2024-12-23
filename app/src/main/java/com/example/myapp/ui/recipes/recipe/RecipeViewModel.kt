@@ -1,9 +1,8 @@
 package com.example.myapp.ui.recipes.recipe
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
@@ -17,13 +16,13 @@ data class RecipeState(
     val errorType: ErrorType? = null,
 )
 
-class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
+class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
     private val _state = MutableLiveData(RecipeState())
     val state: LiveData<RecipeState> get() = _state
 
     internal fun setRecipe(recipe: Recipe) {
         viewModelScope.launch {
-            val isFavorite = RecipesRepository.getInstance(application).isRecipeFavorite(recipe.id)
+            val isFavorite = recipesRepository.isRecipeFavorite(recipe.id)
             _state.value = RecipeState(recipe = recipe, isFavorite = isFavorite)
         }
     }
@@ -34,9 +33,8 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
 
     internal fun onFavoritesClicked(recipe: Recipe) {
         viewModelScope.launch {
-            if (_state.value?.isFavorite == true) RecipesRepository.getInstance(application)
-                .removeRecipeFromFavorites(recipe.id)
-            else RecipesRepository.getInstance(application).addRecipeToFavorites(recipe.id)
+            if (_state.value?.isFavorite == true) recipesRepository.removeRecipeFromFavorites(recipe.id)
+            else recipesRepository.addRecipeToFavorites(recipe.id)
 
             val updatedIsFavorite = !(_state.value?.isFavorite ?: false)
             _state.value = _state.value?.copy(isFavorite = updatedIsFavorite)
