@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Category
 import com.example.myapp.utils.ErrorType
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -16,7 +18,9 @@ data class CategoriesListState(
     val errorMessage: ErrorType? = null,
 )
 
-class CategoriesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class CategoriesListViewModel  @Inject constructor(private val recipesRepository: RecipesRepository) :
+    ViewModel() {
     private val _categories = MutableLiveData(CategoriesListState())
     val categories: LiveData<CategoriesListState> get() = _categories
 

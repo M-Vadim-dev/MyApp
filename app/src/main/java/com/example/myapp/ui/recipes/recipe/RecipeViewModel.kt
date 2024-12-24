@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.RecipesRepository
 import com.example.myapp.model.Recipe
 import com.example.myapp.utils.ErrorType
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 data class RecipeState(
@@ -16,7 +18,9 @@ data class RecipeState(
     val errorType: ErrorType? = null,
 )
 
-class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(private val recipesRepository: RecipesRepository) :
+    ViewModel() {
     private val _state = MutableLiveData(RecipeState())
     val state: LiveData<RecipeState> get() = _state
 
