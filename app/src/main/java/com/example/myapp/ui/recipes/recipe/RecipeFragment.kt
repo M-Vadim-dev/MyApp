@@ -8,17 +8,19 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
-import com.example.myapp.RecipeApplication
 import com.example.myapp.data.ImageLoaderService
 import com.example.myapp.databinding.FragmentRecipeBinding
 import com.example.myapp.ui.recipes.recipeList.IngredientsAdapter
 import com.example.myapp.ui.recipes.recipeList.MethodAdapter
 import com.example.myapp.utils.Constants
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
 
     private var _binding: FragmentRecipeBinding? = null
@@ -26,17 +28,10 @@ class RecipeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
 
-    private lateinit var recipeViewModel: RecipeViewModel
+    private val recipeViewModel: RecipeViewModel by viewModels()
     private val ingredientsAdapter: IngredientsAdapter by lazy { IngredientsAdapter(emptyList()) }
     private val methodsAdapter: MethodAdapter by lazy { MethodAdapter(emptyList()) }
     private val args: RecipeFragmentArgs by navArgs()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireActivity().application as RecipeApplication).appContainer
-        recipeViewModel = appContainer.recipeViewModelFactory.create()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +55,8 @@ class RecipeFragment : Fragment() {
 
         recipeViewModel.state.observe(viewLifecycleOwner) { recipeState ->
             recipeState.errorType?.let { errorType ->
-                Toast.makeText(requireContext(), getString(errorType.messageId), Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(errorType.messageId), Toast.LENGTH_LONG)
+                    .show()
             }
 
             recipeState.recipe?.let { recipe ->
